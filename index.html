@@ -85,8 +85,8 @@
   .reveal-h .w{display:inline-block;opacity:0;filter:blur(6px);transform:translateY(14px)}
   .reveal-h.play .w{animation:wordin .7s cubic-bezier(.16,1,.3,1) forwards}
   @keyframes wordin{to{opacity:1;filter:blur(0);transform:none}}
-  .demorow{display:flex;gap:44px;margin-top:44px;align-items:stretch;text-align:left}
-  .audioframe{width:560px;flex:0 0 auto;height:330px;border-radius:18px;background:var(--card2);border:1px solid var(--amber-dim);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .demorow{display:flex;gap:44px;margin-top:56px;align-items:stretch;text-align:left}
+  .audioframe{width:560px;flex:0 0 auto;height:350px;border-radius:18px;background:var(--card2);border:1px solid var(--amber-dim);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
   .wave{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:7px;padding:0 50px}
   .wave i{width:7px;border-radius:4px;background:var(--amber);opacity:.22;height:10%;animation:wv 1.5s ease-in-out infinite;animation-play-state:paused}
   .wave.live i{opacity:.85;animation-play-state:running}
@@ -159,7 +159,7 @@
   .contlabels b{font-size:20px;letter-spacing:.3em}
   .contcopy{display:flex;justify-content:space-between;gap:70px;margin-top:46px}
   .contcopy .blk{width:620px}
-  .contcopy .blk b{display:block;font-size:21px;letter-spacing:.24em;margin-bottom:16px}
+  .contcopy .blk b{display:block;font-size:22px;letter-spacing:.24em;margin-bottom:16px}
   .contcopy .blk p{font-size:24px;line-height:1.45}
   .contcopy .right{text-align:right}
 
@@ -186,58 +186,50 @@
   .timeline.live .pring.p2{animation-delay:1.6s}
   .timeline.live .pring.p3{animation-delay:3.2s}
   @keyframes pring{0%{width:0;height:0;margin:0;opacity:.8}100%{width:1150px;height:1150px;margin:-575px 0 0 -575px;opacity:0}}
-  .capture{margin-top:26px}
+  .capture{margin-top:34px;position:relative}
   .captrack{position:relative;height:14px;border-radius:8px;background:linear-gradient(90deg,rgba(232,163,61,.75),rgba(232,163,61,.28) 45%,rgba(58,67,86,.9));margin:14px 40px 10px 40px}
   .capmark{position:absolute;top:-13px;left:0;display:flex;align-items:center;gap:10px}
   [data-step].on .capmark{animation:capfloat 9s ease-in-out .8s infinite alternate}
-  @keyframes capfloat{from{transform:translateX(0)}to{transform:translateX(880px)}}
+  @keyframes capfloat{from{transform:translateX(0)}to{transform:translateX(1050px)}}
+  .sweep{position:absolute;left:52px;top:-268px;width:3px;height:300px;border-radius:2px;background:var(--amber);opacity:0;box-shadow:0 0 14px rgba(232,163,61,.65)}
+  [data-step].on .sweep{opacity:.8;animation:capfloat 9s ease-in-out .8s infinite alternate}
   .capmark .tri2{width:0;height:0;border-style:solid;border-width:20px 0 20px 30px;border-color:transparent transparent transparent var(--amber);filter:drop-shadow(0 0 10px rgba(232,163,61,.5))}
   .capmark span{font-size:17px;font-weight:700;color:var(--amber);letter-spacing:.06em;white-space:nowrap}
   .caplabels{display:flex;justify-content:space-between;margin:0 40px;font-size:16px;font-weight:700;letter-spacing:.14em}
   .caplabels .gi{display:block;margin-top:5px;font-size:13px;font-weight:600;letter-spacing:.06em;color:var(--faint);text-align:right;font-style:italic}
-  .caplines{margin:18px 40px 0 40px;font-size:22px;line-height:1.5;color:var(--ink)}
-  .caplines .dim{color:var(--muted)}
 
   /* capabilities stairs */
-  .stairs{position:relative;display:flex;gap:26px;margin-top:64px;align-items:flex-end;height:380px}
-  .stairstep{flex:1;border-radius:14px;padding:24px 26px;position:relative}
+  .stairs{position:relative;display:flex;gap:26px;margin-top:70px;align-items:flex-end;height:400px}
+  .stairsvg{position:absolute;inset:0;pointer-events:none;z-index:0}
+  .stairstep{flex:1;border-radius:14px;padding:24px 26px;position:relative;z-index:1}
   .stairstep b{font-size:20px;letter-spacing:.1em;color:var(--amber)}
   .stairstep p{margin-top:10px;font-size:19px;line-height:1.4;color:var(--ink)}
   .stairstep .era{position:absolute;left:26px;bottom:18px;font-size:13px;font-weight:700;letter-spacing:.18em;color:var(--faint)}
-  .st1{height:190px}.st2{height:250px}.st3{height:310px}.st4{height:375px;background:var(--card);border-color:var(--amber-dim)}
-  .risearc{position:absolute;left:0;right:0;top:0;height:100%;pointer-events:none}
+  .st1{height:195px}.st2{height:260px}.st3{height:325px}.st4{height:395px;background:var(--card);border-color:var(--amber-dim)}
+  .stairs.on1 .st1{animation:glowp 2.8s ease-in-out infinite}
+  .stairs.on1 .st2{animation:glowp 2.8s ease-in-out .35s infinite}
+  .stairs.on1 .st3{animation:glowp 2.8s ease-in-out .7s infinite}
+  .stairs.on1 .st4{animation:glowp2 2.8s ease-in-out 1.05s infinite}
+  @keyframes glowp{0%,100%{box-shadow:0 0 0 rgba(232,163,61,0)}22%{box-shadow:0 0 22px 3px rgba(232,163,61,.28)}44%{box-shadow:0 0 0 rgba(232,163,61,0)}}
+  @keyframes glowp2{0%,100%{box-shadow:0 0 0 rgba(232,163,61,0)}22%{box-shadow:0 0 40px 8px rgba(232,163,61,.5)}44%{box-shadow:0 0 6px 1px rgba(232,163,61,.15)}}
 
-  /* demo 7:42 */
-  .demopill{display:inline-flex;align-items:center;gap:12px;padding:10px 24px;border-radius:100px;border:2px solid var(--amber);color:var(--amber);font-weight:700;font-size:20px;letter-spacing:.2em}
-  .demopill i{width:13px;height:13px;border-radius:50%;background:var(--amber);animation:blink 1.15s steps(1) infinite}
-  .clock{margin-top:44px;font-size:130px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
-  .clock small{font-size:58px;font-weight:700;color:var(--muted);margin-left:14px}
-  .s11grid{display:flex;gap:60px;align-items:flex-start}
-  .s11left{width:560px;flex:0 0 auto}
-  .s11left .sub{margin-top:26px;font-size:27px;line-height:1.45}
-  .vwrap{flex:1;margin-top:8px}
-  .vshell{position:relative;width:100%;height:430px;border-radius:18px;overflow:hidden;background:var(--card2);border:1px solid var(--amber-dim)}
-  .vshell video{width:100%;height:100%;object-fit:cover;display:block;background:#000}
-  .vfb{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:30px}
-  .vfb .playbtn{transform:scale(.9);cursor:default}
-  .vfb p{font-size:19px;color:var(--muted);font-style:italic}
-
-  /* who owns */
-  .ownrow{margin-top:26px}
-  .ownrow .qq{font-size:46px;font-weight:800}
-  .ownrow .qq .m{color:var(--muted)}
-  .tickwrap{display:block;margin-top:6px;height:64px;overflow:hidden}
-  .tick{display:inline-block;font-size:46px;font-weight:800;color:var(--amber);transition:opacity .24s ease,transform .24s ease}
-  .tick.swap{opacity:0;transform:translateY(-16px)}
-  .bodyline{margin-top:38px;font-size:27px;line-height:1.5;max-width:1320px}
+  /* chaos */
+  .chaoswrap{position:relative;margin-top:44px;height:470px;border-radius:18px;background:rgba(11,18,32,.6);border:1px solid var(--line);overflow:hidden}
+  #chaos{width:100%;height:100%;display:block}
+  .chaostag{position:absolute;left:26px;top:20px;font-size:15px;font-weight:800;letter-spacing:.24em;color:var(--faint);transition:color .6s}
 
   /* manage transformation */
-  .mgr{display:flex;gap:34px;margin-top:56px}
-  .mcard{flex:1;padding:36px 34px;min-height:320px;position:relative}
+  .mgr{display:flex;gap:34px;margin-top:48px}
+  .mcard{flex:1;padding:34px;min-height:390px;position:relative}
   .mcard .num{font-size:40px;font-weight:800;color:var(--amber)}
-  .mcard b{display:block;margin-top:12px;font-size:27px;letter-spacing:.1em}
-  .mcard .qline{margin-top:12px;font-size:21px;color:var(--muted);font-style:italic}
-  .mcard p{margin-top:14px;font-size:22px;line-height:1.42}
+  .mcard b{display:block;margin-top:10px;font-size:27px;letter-spacing:.1em}
+  .mcard .qline{margin-top:14px;font-size:23px;font-weight:800;color:var(--amber)}
+  .mcard .tickwrap2{display:block;margin-top:8px;height:36px;overflow:hidden}
+  .mcard .tick{font-size:22px;font-weight:700;color:var(--ink)}
+  .mcard p{margin-top:14px;font-size:21px;line-height:1.42;color:var(--muted)}
+
+  .tick{display:inline-block;transition:opacity .24s ease,transform .24s ease}
+  .tick.swap{opacity:0;transform:translateY(-16px)}
 
   /* org tree */
   .s13grid{display:flex;gap:40px;margin-top:36px;align-items:center}
@@ -264,16 +256,19 @@
   @keyframes nudgeU{0%,100%{transform:translateY(8px)}50%{transform:translateY(-6px)}}
 
   /* asking vs delegating */
-  .avd{display:flex;gap:44px;margin-top:40px}
-  .acard{flex:1;padding:32px 40px}
+  .avd{display:flex;gap:44px;margin-top:36px}
+  .acard{flex:1;padding:30px 40px}
   .acard b{font-size:31px;letter-spacing:.22em}
   .acard .s{display:block;margin-top:10px;font-size:17px;font-weight:800;letter-spacing:.08em;color:var(--ink)}
   .acard .s.hi{color:var(--amber)}
-  .acard ul{list-style:none;margin-top:16px}
+  .acard ul{list-style:none;margin-top:14px}
   .acard li{font-size:22px;padding:6px 0;opacity:0;transform:translateX(-14px);transition:all .5s}
   .acard li.on{opacity:1;transform:none}
   .acard .arrow{color:var(--amber);margin-right:12px}
-  .needs{margin-top:16px;display:inline-block;padding:11px 20px;border-radius:10px;border:1.5px solid var(--amber-dim);font-size:16.5px;font-weight:800;letter-spacing:.12em;color:var(--amber)}
+  .imperatives{display:flex;gap:44px;margin-top:30px}
+  .imp{flex:1;padding:24px 30px;border-radius:14px;border:2px solid var(--amber);background:rgba(232,163,61,.08);text-align:center}
+  .imp b{font-size:25px;font-weight:800;letter-spacing:.06em;color:var(--amber)}
+  .imp span{display:block;margin-top:8px;font-size:17px;color:var(--ink)}
   .sim{position:relative;height:104px;margin-top:16px;border-radius:12px;background:rgba(11,18,32,.55);border:1px solid var(--line)}
   .snode{position:absolute;top:32px;width:86px;text-align:center;font-size:15px;font-weight:800;letter-spacing:.1em;color:var(--muted);border:1.5px solid var(--line);border-radius:10px;padding:9px 0;background:var(--card2)}
   .snode.you{left:22px}
@@ -332,6 +327,19 @@
   .elapsed{position:absolute;right:90px;top:74px;font-size:36px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums;opacity:0;transition:opacity .5s}
   .elapsed.on{opacity:1}
   .elapsed.done{color:var(--amber)}
+  .demopill{display:inline-flex;align-items:center;gap:12px;padding:10px 24px;border-radius:100px;border:2px solid var(--amber);color:var(--amber);font-weight:700;font-size:20px;letter-spacing:.2em}
+  .demopill i{width:13px;height:13px;border-radius:50%;background:var(--amber);animation:blink 1.15s steps(1) infinite}
+  .clock{margin-top:44px;font-size:130px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .clock small{font-size:58px;font-weight:700;color:var(--muted);margin-left:14px}
+  .s11grid{display:flex;gap:60px;align-items:flex-start}
+  .s11left{width:560px;flex:0 0 auto}
+  .s11left .sub{margin-top:26px;font-size:27px;line-height:1.45}
+  .vwrap{flex:1;margin-top:8px}
+  .vshell{position:relative;width:100%;height:430px;border-radius:18px;overflow:hidden;background:var(--card2);border:1px solid var(--amber-dim)}
+  .vshell video{width:100%;height:100%;object-fit:cover;display:block;background:#000}
+  .vfb{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:30px}
+  .vfb .playbtn{transform:scale(.9);cursor:default}
+  .vfb p{font-size:19px;color:var(--muted);font-style:italic}
 
   /* fails */
   .fails{display:flex;gap:34px;margin-top:48px}
@@ -340,10 +348,8 @@
   .fcard .s{display:block;margin-top:10px;font-size:19px;color:var(--muted)}
   .fcard p{margin-top:12px;font-size:24px}
   .fanim{position:relative;height:126px;margin-top:20px;border-radius:12px;background:rgba(11,18,32,.55);border:1px solid var(--line);overflow:hidden}
-  /* drift: wandering dot never reaches the goal */
   .goalflag{animation:goalpulse 2.4s ease-in-out infinite}
   @keyframes goalpulse{0%,100%{opacity:.35}50%{opacity:.85}}
-  /* shelfware: tiles land, dim, dust falls */
   .shelfline{position:absolute;left:24px;right:24px;bottom:26px;height:3px;background:#3A4356;border-radius:2px}
   .shelftile{position:absolute;bottom:29px;width:52px;height:52px;border-radius:9px;background:var(--card);border:1.5px solid var(--amber-dim);animation:shelffade 5.2s ease-in-out infinite}
   .shelftile::after{content:"";position:absolute;left:9px;top:9px;right:9px;height:7px;border-radius:3px;background:var(--amber);opacity:.75}
@@ -354,7 +360,6 @@
   .dust{position:absolute;top:-6px;width:4px;height:4px;border-radius:50%;background:#77808f;opacity:0;animation:dustfall 4.2s linear infinite}
   .dust.d1{left:70px}.dust.d2{left:150px;animation-delay:1.2s}.dust.d3{left:226px;animation-delay:2.3s}.dust.d4{left:110px;animation-delay:3.1s}
   @keyframes dustfall{0%{transform:translateY(0);opacity:0}12%{opacity:.6}90%{opacity:.35}100%{transform:translateY(112px);opacity:0}}
-  /* theater: curtains + bar that never ships */
   .curtain{position:absolute;top:0;bottom:0;width:34px;z-index:1}
   .curtain.cl{left:0;background:linear-gradient(90deg,rgba(122,38,38,.55),transparent)}
   .curtain.cr{right:0;background:linear-gradient(270deg,rgba(122,38,38,.55),transparent)}
@@ -364,8 +369,8 @@
   .stagelabel{position:absolute;left:48px;top:74px;font-size:14px;font-weight:700;letter-spacing:.1em;color:var(--faint)}
   .stagelabel em{font-style:normal;color:var(--red-lt);animation:shipflash 3.8s ease-in-out infinite}
   @keyframes shipflash{0%,60%{opacity:0}66%,74%{opacity:1}80%,100%{opacity:0}}
-  .spot{position:absolute;right:44px;top:12px;width:0;height:0;border-style:solid;border-width:0 26px 82px 26px;border-color:transparent transparent rgba(232,163,61,.13) transparent;transform-origin:top center;animation:sweep 4.6s ease-in-out infinite}
-  @keyframes sweep{0%,100%{transform:rotate(-16deg)}50%{transform:rotate(16deg)}}
+  .spot{position:absolute;right:44px;top:12px;width:0;height:0;border-style:solid;border-width:0 26px 82px 26px;border-color:transparent transparent rgba(232,163,61,.13) transparent;transform-origin:top center;animation:sweepspot 4.6s ease-in-out infinite}
+  @keyframes sweepspot{0%,100%{transform:rotate(-16deg)}50%{transform:rotate(16deg)}}
 
   /* monday */
   .monrows{margin-top:52px}
@@ -375,18 +380,17 @@
 
   .omt{font-size:88px;font-weight:800}
 
-  /* app */
-  .qr{margin-top:42px;width:230px;height:230px;border-radius:16px;background:var(--ink);padding:18px;display:grid;grid-template-columns:repeat(11,1fr);grid-template-rows:repeat(11,1fr);gap:3px}
-  .qr i{background:var(--bg);border-radius:2px;opacity:0;transform:scale(.3);transition:all .4s cubic-bezier(.16,1,.3,1)}
-  .qr i.off{background:transparent}
-  .qr.built i{opacity:1;transform:none}
-
   /* close */
-  .leaves{display:flex;gap:34px;margin-top:52px}
-  .lcard{flex:1;padding:34px 32px;min-height:250px}
-  .lcard b{font-size:22px;letter-spacing:.1em;color:var(--amber)}
-  .lcard p{margin-top:16px;font-size:23px;line-height:1.4}
-  .tagline{position:absolute;left:90px;bottom:64px;font-size:26px;font-weight:700;font-style:italic;color:var(--amber)}
+  .leaves{display:flex;gap:34px;margin-top:34px}
+  .lcard{flex:1;padding:26px 30px;min-height:200px}
+  .lcard b{font-size:21px;letter-spacing:.1em;color:var(--amber)}
+  .lcard p{margin-top:14px;font-size:21px;line-height:1.4}
+  .qrwrap{display:flex;flex-direction:column;align-items:center;margin-top:34px}
+  .qrcard{width:200px;height:200px;border-radius:16px;background:var(--ink);padding:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+  .qrcard svg{width:100%;height:100%;display:block}
+  .qrcap{margin-top:12px;font-size:19px;font-weight:700;letter-spacing:.08em;color:var(--amber)}
+  .tagline{position:absolute;left:90px;bottom:56px;font-size:24px;font-weight:700;font-style:italic;color:var(--amber)}
+  .closefoot{position:absolute;right:90px;bottom:56px;font-size:20px;color:var(--muted)}
   .glow{text-shadow:0 0 26px rgba(232,163,61,.45)}
 </style>
 </head>
@@ -402,7 +406,7 @@
     <div class="meta">Vistage &nbsp;·&nbsp; July 2026</div>
   </section>
 
-  <!-- S2 PARADOX (moved to position 2) -->
+  <!-- S2 PARADOX -->
   <section class="scene" id="s2">
     <div class="stats">
       <div class="stat" data-step data-anim="none">
@@ -461,10 +465,9 @@
         <div class="hintline">The profile writes itself as the interview plays.</div>
       </div>
     </div>
-    <div style="margin-top:32px;font-size:28px;font-weight:700;color:var(--amber);text-align:center" data-step>Everything you see in the next hour is exactly that real.</div>
   </section>
 
-  <!-- S5 PROMISE (statements) -->
+  <!-- S5 PROMISE -->
   <section class="scene" id="s5">
     <div class="display">The winners get three things right.</div>
     <div class="trio">
@@ -484,7 +487,6 @@
         <div class="lab">TECHNOLOGY</div>
       </div>
     </div>
-    <div class="foot" data-step>Three decisions on your desk by Monday morning.</div>
   </section>
 
   <!-- S6 SECTION 1 -->
@@ -495,7 +497,7 @@
     <div class="sub">The question we hear most is “what model should we use?” The surprising answer: the business model.</div>
   </section>
 
-  <!-- S7 TWO OCEANS EXPLAINER -->
+  <!-- S7 TWO OCEANS -->
   <section class="scene" id="s7">
     <div class="display">Two kinds of ocean.</div>
     <div class="oceans">
@@ -517,20 +519,20 @@
 
   <!-- S8 CONTINUUM -->
   <section class="scene" id="s8">
-    <div class="display">AI creates innovation opportunities in markets that don’t exist yet.<br><span class="amber">And optimization opportunities in the market you run today.</span></div>
+    <div class="display" style="font-size:47px">AI creates new revenue and cost-saving opportunities.<br><span class="amber">You decide when, and where, to invest in each.</span></div>
     <div data-step data-anim="none" id="contwrap">
       <div class="contlabels">
-        <b style="color:var(--blue-lt)">BLUE OCEAN · INNOVATION</b><b style="color:var(--red-lt)">RED OCEAN · OPTIMIZATION</b>
+        <b style="color:var(--blue-lt)">BLUE OCEAN</b><b style="color:var(--red-lt)">RED OCEAN</b>
       </div>
       <div class="contbar" id="contbar"><div class="mask"></div><div class="shine"></div></div>
     </div>
     <div class="contcopy">
       <div class="blk" data-step data-anim="left">
-        <b style="color:var(--blue-lt)">GO BEYOND</b>
+        <b style="color:var(--blue-lt)">INNOVATE</b>
         <p>Which new markets open, and who captures them? Does your current market keep its relevance?</p>
       </div>
       <div class="blk right" data-step data-anim="right">
-        <b style="color:var(--red-lt)">GO FASTER</b>
+        <b style="color:var(--red-lt)">OPTIMIZE</b>
         <p>Everyone, including upstarts you haven’t met, is coming for cheaper, faster, more efficient. So can you: more profit from the model you already run.</p>
       </div>
     </div>
@@ -540,11 +542,11 @@
   <!-- S9 DISCUSS 1 -->
   <section class="scene discuss" id="s9">
     <span class="badge">DISCUSS &nbsp;·&nbsp; DECISION 1 OF 3</span>
-    <div class="q">Where are your AI bets today: faster, beyond, or both?</div>
+    <div class="q">Where do you see the highest-ROI AI bets to place in your organization today?</div>
     <div class="minibar"></div>
     <div class="minilabels">
-      <span style="color:var(--blue-lt)">GO BEYOND &nbsp;<i>· innovation</i></span>
-      <span style="color:var(--red-lt)"><i>optimization ·</i>&nbsp; GO FASTER</span>
+      <span style="color:var(--blue-lt)">INNOVATE &nbsp;<i>· new markets</i></span>
+      <span style="color:var(--red-lt)"><i>today’s model ·</i>&nbsp; OPTIMIZE</span>
     </div>
   </section>
 
@@ -553,10 +555,9 @@
     <div class="secnum">02</div>
     <span class="kicker">People &amp; Work</span>
     <div class="display">AI isn’t just software.<br><span class="amber">It’s transformative. It must be managed.</span></div>
-    <div class="sub">First, proof of how much is changing. Then, how to manage it deliberately.</div>
   </section>
 
-  <!-- S11 RIPPLE (moved here) -->
+  <!-- S11 RIPPLE -->
   <section class="scene" id="s11">
     <div class="display">The ripple reaches every industry.<br><span class="amber">The only variable is when.</span></div>
     <div class="timeline" data-step data-anim="none" id="tl">
@@ -566,6 +567,7 @@
       <div class="pring"></div><div class="pring p2"></div><div class="pring p3"></div>
     </div>
     <div class="capture" data-step data-anim="none">
+      <div class="sweep"></div>
       <div class="caplabels">
         <span style="color:var(--amber)">REPEATABLE · WRITTEN DOWN</span>
         <span style="color:var(--muted)">COMPLEX · JUDGMENT-HEAVY<span class="gi">the far edge of the ripple: general intelligence</span></span>
@@ -573,17 +575,22 @@
       <div class="captrack">
         <div class="capmark"><i class="tri2"></i><span>reasoning improves</span></div>
       </div>
-      <div class="caplines">
-        The more repeatable the work, and the better it’s written down, the easier it is to capture today.<br>
-        <span class="dim">As reasoning improves, agents take on more complex work. The ripple keeps moving out.</span>
-      </div>
     </div>
   </section>
 
-  <!-- S12 CAPABILITIES (new) -->
+  <!-- S12 CAPABILITIES -->
   <section class="scene" id="s12">
     <div class="display">What’s driving the ripple: <span class="amber">capability.</span></div>
-    <div class="stairs">
+    <div class="stairs" id="stairs">
+      <svg class="stairsvg" viewBox="0 0 1420 400" preserveAspectRatio="none">
+        <path id="risepath" d="M 178 330 C 420 320, 560 260, 710 205 S 1080 90, 1242 40" fill="none" stroke="rgba(232,163,61,.35)" stroke-width="2.5" stroke-dasharray="6 9"/>
+        <circle r="7" fill="#E8A33D" opacity=".9">
+          <animateMotion dur="3.4s" repeatCount="indefinite"><mpath href="#risepath"/></animateMotion>
+        </circle>
+        <circle r="14" fill="none" stroke="rgba(232,163,61,.45)" stroke-width="1.5">
+          <animateMotion dur="3.4s" repeatCount="indefinite"><mpath href="#risepath"/></animateMotion>
+        </circle>
+      </svg>
       <div class="stairstep card st1" data-step data-anim="pop">
         <b>STRUCTURED Q&amp;A</b>
         <p>Ask a question, get an answer.</p>
@@ -629,21 +636,17 @@
     <div class="foot" data-step>Real inbox. Real calendar. Real connections. Nothing staged.</div>
   </section>
 
-  <!-- S14 WHO OWNS -->
+  <!-- S14 CHAOS -->
   <section class="scene" id="s14">
-    <div class="ownrow">
-      <div class="qq"><span class="m">Who owns AI?</span></div>
-      <span class="tickwrap"><span class="tick" id="tick1">the Head of IT</span></span>
+    <div class="display">Transformative or chaotic:<br><span class="amber">the power of AI.</span></div>
+    <div class="chaoswrap noadvance" data-step data-anim="none" id="chaoswrap">
+      <canvas id="chaos"></canvas>
+      <div class="chaostag" id="chaostag">A STABLE, ORDERED ORGANIZATION</div>
     </div>
-    <div class="ownrow" data-step data-anim="none">
-      <div class="qq"><span class="m">Who’s going to own the transformation?</span></div>
-      <span class="tickwrap"><span class="tick" id="tick2">top-down: the CEO</span></span>
-    </div>
-    <div class="bodyline" data-step>Tools follow whoever picked them up. When that person leaves, the tools leave too. Transformation stays only when someone senior owns it.</div>
-    <div class="foot strong" data-step>There’s no single right answer. But nobody owning it is the wrong one.</div>
+    <div class="foot" data-step>This is “just turn AI on for everyone”: every tool, every team, no deliberation. Cutting-edge, and unmanaged.</div>
   </section>
 
-  <!-- S15 MANAGING THE TRANSFORMATION (new) -->
+  <!-- S15 MANAGING -->
   <section class="scene" id="s15">
     <div class="display">Transformation is managed,<br><span class="amber">or it’s chaotic.</span></div>
     <div class="mgr">
@@ -651,18 +654,21 @@
         <div class="num">1</div>
         <b>OWN IT</b>
         <div class="qline">Who owns it?</div>
+        <span class="tickwrap2"><span class="tick" id="tickOwn">the Head of IT</span></span>
         <p>A senior name, accountable for the change, not just the tools.</p>
       </div>
       <div class="mcard card shadow" data-step data-anim="pop">
         <div class="num">2</div>
         <b>ENABLE IT</b>
         <div class="qline">How is your organization enabled?</div>
+        <span class="tickwrap2"><span class="tick" id="tickEnable">AI proficiency for everyone</span></span>
         <p>Skills, champions, and working knowledge across every team.</p>
       </div>
       <div class="mcard card shadow" data-step data-anim="pop">
         <div class="num">3</div>
         <b>STEER IT</b>
         <div class="qline">How is it steered?</div>
+        <span class="tickwrap2"><span class="tick" id="tickSteer">top-down: the CEO</span></span>
         <p>Pointed at your strategy, intentionally, not wherever the tools drift.</p>
       </div>
     </div>
@@ -713,56 +719,12 @@
     <div class="secnum">03</div>
     <span class="kicker">Technology</span>
     <div class="display">AI isn’t a SaaS tool.<br><span class="amber">It’s a technological transformation.</span></div>
-    <div class="sub">One question: is your foundation ready?</div>
+    <div class="sub">One question: is your organization ready?</div>
   </section>
 
-  <!-- S19 ASKING VS DELEGATING -->
+  <!-- S19 STACK (moved before asking/delegating) -->
   <section class="scene" id="s19">
-    <div class="display">Asking vs. delegating</div>
-    <div class="avd">
-      <div class="acard card" data-step id="askCard">
-        <b>ASKING</b>
-        <span class="s">GENAI · 2023–2024</span>
-        <div class="sim">
-          <span class="snode you">YOU</span>
-          <i class="sdot askdot"></i>
-          <span class="snode aiL">AI</span>
-          <div class="asktask">your next step</div>
-          <div class="asknote">every answer comes back to your desk</div>
-        </div>
-        <ul>
-          <li><span class="arrow">→</span>You write a prompt</li>
-          <li><span class="arrow">→</span>It gives you an answer</li>
-          <li><span class="arrow">→</span>You do the next step</li>
-        </ul>
-        <div class="needs">TO ASK, YOU NEED: CONTEXT + DATA</div>
-      </div>
-      <div class="acard card" data-step id="delCard" style="background:var(--card);border-color:var(--amber-dim)">
-        <b style="color:var(--amber)">DELEGATING</b>
-        <span class="s hi">AGENTIC, TOWARD MORE GENERAL INTELLIGENCE · 2025 AND BEYOND</span>
-        <div class="sim">
-          <span class="snode you">YOU</span>
-          <i class="sdot deldot"></i>
-          <span class="snode agent">AGENT</span>
-          <div class="ring2"></div>
-          <div class="delword"><i>REASONS</i><i>ACTS</i><i>VERIFIES</i></div>
-          <div class="delout"><div class="dtile">✓</div><div class="dtile">✓</div><div class="dtile">✓</div></div>
-          <div class="delnote">finished work stacks up</div>
-        </div>
-        <ul>
-          <li><span class="arrow">→</span>You hand off a goal</li>
-          <li><span class="arrow">→</span>It reasons, acts, verifies</li>
-          <li><span class="arrow">→</span>It delivers finished work</li>
-        </ul>
-        <div class="needs">TO DELEGATE, YOU NEED: TOOLS + PERMISSIONS</div>
-      </div>
-    </div>
-    <div class="foot strong" data-step style="color:var(--amber)">Capability is the easy part. Access is the work.</div>
-  </section>
-
-  <!-- S20 STACK -->
-  <section class="scene" id="s20">
-    <div class="display">Designing your AI stack</div>
+    <div class="display">Enabling your organization: <span class="amber">the AI stack.</span></div>
     <div class="oceanaxis" data-step data-anim="none" id="axiswrap">
       <b class="l">USING</b>
       <div class="strip" id="oceanstrip"></div>
@@ -786,6 +748,51 @@
       </div>
     </div>
     <div class="foot" data-step>There’s no right lane. There’s the right lane for the job in front of you.</div>
+  </section>
+
+  <!-- S20 ASKING VS DELEGATING -->
+  <section class="scene" id="s20">
+    <div class="display" style="font-size:48px">Asking vs. delegating</div>
+    <div class="avd">
+      <div class="acard card" data-step id="askCard">
+        <b>ASKING</b>
+        <span class="s">GENAI · 2023–2024</span>
+        <div class="sim">
+          <span class="snode you">YOU</span>
+          <i class="sdot askdot"></i>
+          <span class="snode aiL">AI</span>
+          <div class="asktask">your next step</div>
+          <div class="asknote">every answer comes back to your desk</div>
+        </div>
+        <ul>
+          <li><span class="arrow">→</span>You write a prompt</li>
+          <li><span class="arrow">→</span>It gives you an answer</li>
+          <li><span class="arrow">→</span>You do the next step</li>
+        </ul>
+      </div>
+      <div class="acard card" data-step id="delCard" style="background:var(--card);border-color:var(--amber-dim)">
+        <b style="color:var(--amber)">DELEGATING</b>
+        <span class="s hi">AGENTIC, TOWARD MORE GENERAL INTELLIGENCE · 2025 AND BEYOND</span>
+        <div class="sim">
+          <span class="snode you">YOU</span>
+          <i class="sdot deldot"></i>
+          <span class="snode agent">AGENT</span>
+          <div class="ring2"></div>
+          <div class="delword"><i>REASONS</i><i>ACTS</i><i>VERIFIES</i></div>
+          <div class="delout"><div class="dtile">✓</div><div class="dtile">✓</div><div class="dtile">✓</div></div>
+          <div class="delnote">finished work stacks up</div>
+        </div>
+        <ul>
+          <li><span class="arrow">→</span>You hand off a goal</li>
+          <li><span class="arrow">→</span>It reasons, acts, verifies</li>
+          <li><span class="arrow">→</span>It delivers finished work</li>
+        </ul>
+      </div>
+    </div>
+    <div class="imperatives" data-step data-anim="stamp">
+      <div class="imp"><b>TO ASK, YOU NEED CONTEXT + DATA</b><span>an organizational imperative, not a technical detail</span></div>
+      <div class="imp"><b>TO DELEGATE, YOU NEED TOOLS + PERMISSIONS</b><span>defined deliberately, managed intentionally</span></div>
+    </div>
   </section>
 
   <!-- S21 LIVE AGENT -->
@@ -817,12 +824,12 @@
 
   <!-- S23 BOTTOM LINE -->
   <section class="scene" id="s23">
-    <div class="display">Miss one foundation, and AI fails. Predictably.</div>
+    <div class="display">Miss one foundation: AI fails. Predictably.</div>
     <div class="fails">
       <div class="fcard card shadow" data-step data-anim="stamp">
         <b>DRIFT</b><span class="s">skip business strategy</span>
         <div class="fanim">
-          <svg class="driftsvg" viewBox="0 0 380 126" style="position:absolute;inset:0">
+          <svg viewBox="0 0 380 126" style="position:absolute;inset:0">
             <path id="driftpath" d="M 30 86 C 90 22, 140 114, 200 58 S 300 100, 344 44" fill="none" stroke="#3A4356" stroke-width="2.5" stroke-dasharray="7 8"/>
             <circle class="goalflag" cx="344" cy="44" r="11" fill="none" stroke="#6BA6C9" stroke-width="2"/>
             <text x="344" y="24" fill="#5A6478" font-size="11" font-weight="700" text-anchor="middle" letter-spacing="1">GOAL</text>
@@ -875,24 +882,19 @@
     <div class="omt">One more thing.</div>
   </section>
 
-  <!-- S26 APP -->
-  <section class="scene center" id="s26">
-    <div class="kicker">The Leader’s Journey</div>
-    <div class="display" style="margin-top:24px" data-step data-anim="none">Everything you decided, yours to keep.</div>
-    <div class="sub" style="margin-top:24px;max-width:1150px" data-step>An interactive experience of the leader’s journey through AI transformation: the three questions, the decisions, and what comes after.</div>
-    <div class="qr" id="qr" data-step data-anim="pop"></div>
-    <div style="margin-top:28px;font-size:23px;font-style:italic;color:var(--muted)" data-step>On your phone tonight, and on the sheet in front of you.</div>
-  </section>
-
-  <!-- S27 CLOSE -->
-  <section class="scene" id="s27">
+  <!-- S26 CLOSE -->
+  <section class="scene" id="s26">
     <div class="display">The depth lives on the table.</div>
     <div class="leaves">
       <div class="lcard card" data-step data-anim="pop"><b>THE WHITE PAPER</b><p>the full thinking behind the three foundations</p></div>
       <div class="lcard card" data-step data-anim="pop"><b>THE DESK REFERENCE</b><p>critical questions, plus AI basics at your desk</p></div>
       <div class="lcard card" data-step data-anim="pop"><b>THE FIVE QUESTIONS</b><p>for your leadership team</p></div>
     </div>
-    <div style="margin-top:56px;font-size:28px;color:var(--muted)" data-step>What we didn’t cover: security, privacy, policy, cost. Find us at lunch.</div>
+    <div class="qrwrap" data-step data-anim="pop">
+      <div class="qrcard"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" shape-rendering="crispEdges"><path d="M2 2h1v1h-1zM3 2h1v1h-1zM4 2h1v1h-1zM5 2h1v1h-1zM6 2h1v1h-1zM7 2h1v1h-1zM8 2h1v1h-1zM11 2h1v1h-1zM13 2h1v1h-1zM15 2h1v1h-1zM18 2h1v1h-1zM20 2h1v1h-1zM21 2h1v1h-1zM22 2h1v1h-1zM23 2h1v1h-1zM24 2h1v1h-1zM25 2h1v1h-1zM26 2h1v1h-1zM2 3h1v1h-1zM8 3h1v1h-1zM11 3h1v1h-1zM12 3h1v1h-1zM17 3h1v1h-1zM18 3h1v1h-1zM20 3h1v1h-1zM26 3h1v1h-1zM2 4h1v1h-1zM4 4h1v1h-1zM5 4h1v1h-1zM6 4h1v1h-1zM8 4h1v1h-1zM10 4h1v1h-1zM11 4h1v1h-1zM16 4h1v1h-1zM17 4h1v1h-1zM20 4h1v1h-1zM22 4h1v1h-1zM23 4h1v1h-1zM24 4h1v1h-1zM26 4h1v1h-1zM2 5h1v1h-1zM4 5h1v1h-1zM5 5h1v1h-1zM6 5h1v1h-1zM8 5h1v1h-1zM10 5h1v1h-1zM11 5h1v1h-1zM14 5h1v1h-1zM15 5h1v1h-1zM17 5h1v1h-1zM20 5h1v1h-1zM22 5h1v1h-1zM23 5h1v1h-1zM24 5h1v1h-1zM26 5h1v1h-1zM2 6h1v1h-1zM4 6h1v1h-1zM5 6h1v1h-1zM6 6h1v1h-1zM8 6h1v1h-1zM10 6h1v1h-1zM11 6h1v1h-1zM13 6h1v1h-1zM14 6h1v1h-1zM15 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h1v1h-1zM23 6h1v1h-1zM24 6h1v1h-1zM26 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM10 7h1v1h-1zM11 7h1v1h-1zM13 7h1v1h-1zM15 7h1v1h-1zM16 7h1v1h-1zM17 7h1v1h-1zM20 7h1v1h-1zM26 7h1v1h-1zM2 8h1v1h-1zM3 8h1v1h-1zM4 8h1v1h-1zM5 8h1v1h-1zM6 8h1v1h-1zM7 8h1v1h-1zM8 8h1v1h-1zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h1v1h-1zM21 8h1v1h-1zM22 8h1v1h-1zM23 8h1v1h-1zM24 8h1v1h-1zM25 8h1v1h-1zM26 8h1v1h-1zM10 9h1v1h-1zM11 9h1v1h-1zM13 9h1v1h-1zM17 9h1v1h-1zM2 10h1v1h-1zM4 10h1v1h-1zM5 10h1v1h-1zM6 10h1v1h-1zM7 10h1v1h-1zM8 10h1v1h-1zM12 10h1v1h-1zM13 10h1v1h-1zM15 10h1v1h-1zM16 10h1v1h-1zM18 10h1v1h-1zM20 10h1v1h-1zM21 10h1v1h-1zM22 10h1v1h-1zM23 10h1v1h-1zM24 10h1v1h-1zM2 11h1v1h-1zM5 11h1v1h-1zM6 11h1v1h-1zM7 11h1v1h-1zM10 11h1v1h-1zM11 11h1v1h-1zM13 11h1v1h-1zM18 11h1v1h-1zM21 11h1v1h-1zM25 11h1v1h-1zM3 12h1v1h-1zM4 12h1v1h-1zM5 12h1v1h-1zM6 12h1v1h-1zM7 12h1v1h-1zM8 12h1v1h-1zM11 12h1v1h-1zM13 12h1v1h-1zM15 12h1v1h-1zM17 12h1v1h-1zM18 12h1v1h-1zM19 12h1v1h-1zM21 12h1v1h-1zM22 12h1v1h-1zM23 12h1v1h-1zM25 12h1v1h-1zM26 12h1v1h-1zM7 13h1v1h-1zM9 13h1v1h-1zM11 13h1v1h-1zM12 13h1v1h-1zM13 13h1v1h-1zM14 13h1v1h-1zM16 13h1v1h-1zM17 13h1v1h-1zM19 13h1v1h-1zM26 13h1v1h-1zM4 14h1v1h-1zM5 14h1v1h-1zM7 14h1v1h-1zM8 14h1v1h-1zM12 14h1v1h-1zM13 14h1v1h-1zM15 14h1v1h-1zM16 14h1v1h-1zM19 14h1v1h-1zM20 14h1v1h-1zM21 14h1v1h-1zM22 14h1v1h-1zM24 14h1v1h-1zM25 14h1v1h-1zM26 14h1v1h-1zM2 15h1v1h-1zM4 15h1v1h-1zM5 15h1v1h-1zM6 15h1v1h-1zM9 15h1v1h-1zM14 15h1v1h-1zM15 15h1v1h-1zM18 15h1v1h-1zM21 15h1v1h-1zM23 15h1v1h-1zM25 15h1v1h-1zM2 16h1v1h-1zM5 16h1v1h-1zM6 16h1v1h-1zM7 16h1v1h-1zM8 16h1v1h-1zM10 16h1v1h-1zM12 16h1v1h-1zM15 16h1v1h-1zM16 16h1v1h-1zM17 16h1v1h-1zM20 16h1v1h-1zM21 16h1v1h-1zM22 16h1v1h-1zM23 16h1v1h-1zM25 16h1v1h-1zM26 16h1v1h-1zM2 17h1v1h-1zM6 17h1v1h-1zM9 17h1v1h-1zM10 17h1v1h-1zM14 17h1v1h-1zM16 17h1v1h-1zM17 17h1v1h-1zM18 17h1v1h-1zM19 17h1v1h-1zM21 17h1v1h-1zM22 17h1v1h-1zM26 17h1v1h-1zM2 18h1v1h-1zM5 18h1v1h-1zM6 18h1v1h-1zM8 18h1v1h-1zM9 18h1v1h-1zM11 18h1v1h-1zM12 18h1v1h-1zM14 18h1v1h-1zM15 18h1v1h-1zM16 18h1v1h-1zM17 18h1v1h-1zM18 18h1v1h-1zM19 18h1v1h-1zM20 18h1v1h-1zM21 18h1v1h-1zM22 18h1v1h-1zM24 18h1v1h-1zM10 19h1v1h-1zM11 19h1v1h-1zM12 19h1v1h-1zM15 19h1v1h-1zM18 19h1v1h-1zM22 19h1v1h-1zM23 19h1v1h-1zM2 20h1v1h-1zM3 20h1v1h-1zM4 20h1v1h-1zM5 20h1v1h-1zM6 20h1v1h-1zM7 20h1v1h-1zM8 20h1v1h-1zM13 20h1v1h-1zM14 20h1v1h-1zM16 20h1v1h-1zM18 20h1v1h-1zM20 20h1v1h-1zM22 20h1v1h-1zM24 20h1v1h-1zM25 20h1v1h-1zM26 20h1v1h-1zM2 21h1v1h-1zM8 21h1v1h-1zM10 21h1v1h-1zM11 21h1v1h-1zM12 21h1v1h-1zM13 21h1v1h-1zM16 21h1v1h-1zM18 21h1v1h-1zM22 21h1v1h-1zM23 21h1v1h-1zM2 22h1v1h-1zM4 22h1v1h-1zM5 22h1v1h-1zM6 22h1v1h-1zM8 22h1v1h-1zM10 22h1v1h-1zM12 22h1v1h-1zM13 22h1v1h-1zM17 22h1v1h-1zM18 22h1v1h-1zM19 22h1v1h-1zM20 22h1v1h-1zM21 22h1v1h-1zM22 22h1v1h-1zM24 22h1v1h-1zM25 22h1v1h-1zM26 22h1v1h-1zM2 23h1v1h-1zM4 23h1v1h-1zM5 23h1v1h-1zM6 23h1v1h-1zM8 23h1v1h-1zM10 23h1v1h-1zM11 23h1v1h-1zM12 23h1v1h-1zM14 23h1v1h-1zM15 23h1v1h-1zM19 23h1v1h-1zM20 23h1v1h-1zM22 23h1v1h-1zM23 23h1v1h-1zM24 23h1v1h-1zM25 23h1v1h-1zM26 23h1v1h-1zM2 24h1v1h-1zM4 24h1v1h-1zM5 24h1v1h-1zM6 24h1v1h-1zM8 24h1v1h-1zM10 24h1v1h-1zM12 24h1v1h-1zM15 24h1v1h-1zM16 24h1v1h-1zM17 24h1v1h-1zM19 24h1v1h-1zM23 24h1v1h-1zM24 24h1v1h-1zM26 24h1v1h-1zM2 25h1v1h-1zM8 25h1v1h-1zM11 25h1v1h-1zM14 25h1v1h-1zM15 25h1v1h-1zM17 25h1v1h-1zM18 25h1v1h-1zM20 25h1v1h-1zM21 25h1v1h-1zM22 25h1v1h-1zM23 25h1v1h-1zM26 25h1v1h-1zM2 26h1v1h-1zM3 26h1v1h-1zM4 26h1v1h-1zM5 26h1v1h-1zM6 26h1v1h-1zM7 26h1v1h-1zM8 26h1v1h-1zM10 26h1v1h-1zM11 26h1v1h-1zM14 26h1v1h-1zM16 26h1v1h-1zM21 26h1v1h-1zM22 26h1v1h-1zM23 26h1v1h-1zM24 26h1v1h-1zM25 26h1v1h-1zM26 26h1v1h-1z" fill="#0B1220"/></svg></div>
+      <div class="qrcap">socratixai.com</div>
+    </div>
+    <div class="closefoot" data-step>What we didn’t cover: security, privacy, policy, cost. Find us at lunch.</div>
     <div class="tagline" data-step data-anim="none" id="tagline">Human Wisdom. AI Illumination.</div>
   </section>
 
@@ -903,7 +905,7 @@
 <div id="hud">
   <div id="secdots"><i></i><i></i><i></i></div>
   <div id="bar"></div>
-  <div id="counter">01 / 27</div>
+  <div id="counter">01 / 26</div>
   <div id="hint">→ &nbsp;advance beats &nbsp;·&nbsp; ← &nbsp;back &nbsp;·&nbsp; F &nbsp;fullscreen</div>
 </div>
 
@@ -1011,8 +1013,7 @@
   ];
   (function(){
     var tl = document.getElementById('tl');
-    var origin = tl.querySelectorAll('.pring');
-    origin.forEach(function(r){ r.style.left = 'calc(' + RIPPLE[0][1] + '% + 0px)'; r.style.top = '105px'; });
+    tl.querySelectorAll('.pring').forEach(function(r){ r.style.left = 'calc(' + RIPPLE[0][1] + '% + 0px)'; r.style.top = '105px'; });
     RIPPLE.forEach(function(r, i){
       var d = document.createElement('div');
       d.className = 'tl-dot'; d.id = 'dot' + i;
@@ -1035,6 +1036,90 @@
         document.getElementById('lab' + i).classList.add('lit');
       }, 300 + i * 340);
     })(i);
+  }
+
+  /* chaos simulation */
+  var chaosRAF = null;
+  function chaosStart(){
+    try{
+      var c = document.getElementById('chaos'); if (!c || chaosRAF) return;
+      var dpr = window.devicePixelRatio || 1;
+      var W = c.clientWidth || 1418, H = c.clientHeight || 468;
+      c.width = W * dpr; c.height = H * dpr;
+      var g = c.getContext('2d'); if (!g) return;
+      if (g.setTransform) g.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var tag = document.getElementById('chaostag');
+      var cols = 17, rows = 7, mx = 80, my = 60;
+      var sx = (W - 2 * mx) / (cols - 1), sy = (H - 2 * my) / (rows - 1);
+      var dots = [];
+      for (var r = 0; r < rows; r++) for (var col = 0; col < cols; col++)
+        dots.push({ hx: mx + col * sx, hy: my + r * sy, x: mx + col * sx, y: my + r * sy, vx: 0, vy: 0, inf: false, ph: Math.random() * 6.28 });
+      var t0 = null, phase = 0, intr = null, doneAt = null, fade = 0;
+      function reset(now){
+        dots.forEach(function(d){ d.x = d.hx; d.y = d.hy; d.vx = d.vy = 0; d.inf = false; });
+        t0 = now; phase = 0; intr = null; doneAt = null; fade = 0;
+        if (tag){ tag.textContent = 'A STABLE, ORDERED ORGANIZATION'; tag.style.color = ''; }
+      }
+      function frame(now){
+        if (t0 === null) t0 = now;
+        var t = (now - t0) / 1000;
+        g.clearRect(0, 0, W, H);
+        if (phase === 0 && t > 2.4){ phase = 1; intr = { x: -24, y: H * 0.46, vx: 3.6, vy: -0.3 };
+          if (tag){ tag.textContent = 'AI, SWITCHED ON FOR EVERYONE AT ONCE'; tag.style.color = '#E8A33D'; } }
+        if (phase === 1 && intr){
+          intr.x += intr.vx; intr.y += intr.vy;
+          for (var i = 0; i < dots.length; i++){
+            var d = dots[i];
+            if (!d.inf && Math.abs(d.x - intr.x) < 18 && Math.abs(d.y - intr.y) < 18){
+              d.inf = true; d.vx = (Math.random() - .5) * 2.2; d.vy = (Math.random() - .5) * 2.2; phase = 2;
+            }
+          }
+          if (intr.x > W + 30) phase = 2;
+        }
+        if (phase >= 2){
+          for (var i = 0; i < dots.length; i++){
+            var d = dots[i]; if (!d.inf) continue;
+            for (var j = 0; j < dots.length; j++){
+              var o = dots[j]; if (o.inf) continue;
+              var dx = o.x - d.x, dy = o.y - d.y;
+              if (dx * dx + dy * dy < 3600 && Math.random() < 0.04){
+                o.inf = true; o.vx = (Math.random() - .5) * 2.6; o.vy = (Math.random() - .5) * 2.6;
+              }
+            }
+          }
+          var allInf = dots.every(function(d){ return d.inf; });
+          if (allInf && !doneAt){ doneAt = now; if (tag){ tag.textContent = 'UNMANAGED. UNRECOGNIZABLE.'; tag.style.color = '#C97B6B'; } }
+          if (doneAt && now - doneAt > 3600) phase = 3;
+        }
+        if (phase === 3){ fade += 0.02; if (fade >= 1){ reset(now); } }
+        for (var i = 0; i < dots.length; i++){
+          var d = dots[i];
+          if (d.inf){
+            d.vx *= 1.009; d.vy *= 1.009;
+            var mv = 4.6;
+            d.vx = Math.max(-mv, Math.min(mv, d.vx)); d.vy = Math.max(-mv, Math.min(mv, d.vy));
+            d.x += d.vx; d.y += d.vy;
+            if (d.x < 9 || d.x > W - 9) d.vx *= -1;
+            if (d.y < 9 || d.y > H - 9) d.vy *= -1;
+            g.fillStyle = 'rgba(232,163,61,' + (0.9 * (1 - fade)).toFixed(3) + ')';
+          } else {
+            d.x = d.hx + Math.sin(now / 1900 + d.ph) * 1.7;
+            d.y = d.hy + Math.cos(now / 2300 + d.ph) * 1.7;
+            g.fillStyle = 'rgba(124,138,166,' + (0.75 * (1 - fade)).toFixed(3) + ')';
+          }
+          g.beginPath(); g.arc(d.x, d.y, d.inf ? 5 : 4, 0, 6.28); g.fill();
+        }
+        if (phase === 1 && intr){
+          g.fillStyle = 'rgba(232,163,61,.95)';
+          g.beginPath(); g.arc(intr.x, intr.y, 7, 0, 6.28); g.fill();
+        }
+        chaosRAF = requestAnimationFrame(frame);
+      }
+      chaosRAF = requestAnimationFrame(frame);
+    }catch(e){}
+  }
+  function chaosStop(){
+    if (chaosRAF){ try{ cancelAnimationFrame(chaosRAF); }catch(e){} chaosRAF = null; }
   }
 
   /* count up */
@@ -1080,10 +1165,12 @@
   }
 
   /* tickers */
-  var TICK1 = ['the Head of IT', 'the Head of HR', 'the CEO', 'an SVP', 'a smart whiz kid', 'nobody, officially'];
-  var TICK2 = ['top-down: the CEO', 'bottom-up: your managers', 'a cross-functional committee', 'right now: no one'];
+  var TICK_OWN = ['the Head of IT', 'the Head of HR', 'the CEO', 'an SVP', 'a smart whiz kid', 'nobody, officially'];
+  var TICK_ENABLE = ['AI proficiency for everyone', 'named champions in each team', 'trained citizen developers', 'hands-on working sessions'];
+  var TICK_STEER = ['top-down: the CEO', 'bottom-up: your managers', 'a cross-functional committee', 'pointed at the strategy'];
   function startTicker(id, items){
     var el = document.getElementById(id), i = 0;
+    if (!el) return;
     el.textContent = items[0];
     return every(function(){
       el.classList.add('swap');
@@ -1095,7 +1182,7 @@
     }, 1750);
   }
 
-  /* org tree flows */
+  /* org tree */
   function treeEls(){
     var t = document.getElementById('tree');
     return { r0: t.querySelectorAll('.r0'), r1: t.querySelectorAll('.r1'), r2: t.querySelectorAll('.r2'), lines: t.querySelectorAll('line') };
@@ -1143,25 +1230,6 @@
     }
   }
 
-  /* QR */
-  (function(){
-    var qr = document.getElementById('qr');
-    function finder(r, c){ return (r < 3 && c < 3) || (r < 3 && c > 7) || (r > 7 && c < 3); }
-    var seed = 7;
-    function rnd(){ seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
-    for (var r = 0; r < 11; r++) for (var c = 0; c < 11; c++){
-      var i = document.createElement('i');
-      var on;
-      if (finder(r, c)){
-        var rr = r % 8, cc = c > 7 ? c - 8 : c;
-        on = !(rr === 1 && cc === 1);
-      } else on = rnd() > .5;
-      if (!on) i.className = 'off';
-      i.style.transitionDelay = (rnd() * .8).toFixed(2) + 's';
-      qr.appendChild(i);
-    }
-  })();
-
   /* video */
   var vid = document.getElementById('mv');
   function videoFallback(){
@@ -1186,7 +1254,7 @@
     if (el.classList.contains('vwrap') && vid){
       try{ var pp = vid.play(); if (pp && pp.catch) pp.catch(function(){}); }catch(e){}
     }
-    if (el.querySelector && el.querySelector('#tick2')) startTicker('tick2', TICK2);
+    if (el.id === 'chaoswrap') later(chaosStart, 300);
     if (el.id === 'tdcol') cascade('down', 'litA');
     if (el.id === 'bucol'){ cascade('up', 'litB'); later(treeLoop, 1400); }
     if (el.id === 'axiswrap') later(function(){ document.getElementById('axiswrap').classList.add('drawn'); }, 120);
@@ -1194,13 +1262,20 @@
     if (el.id === 'askCard' || el.id === 'delCard'){
       el.querySelectorAll('li').forEach(function(li, i){ later(function(){ li.classList.add('on'); }, 350 + i * 300); });
     }
-    if (el.id === 'qr') later(function(){ el.classList.add('built'); }, 150);
+    if (el.classList.contains('stairstep')){
+      var stairs = document.getElementById('stairs');
+      if (stairs && el.classList.contains('st4')) stairs.classList.add('on1');
+    }
     if (el.id === 'tagline') later(function(){ el.classList.add('glow'); }, 500);
   }
 
   /* lifecycle */
   function onEnter(id){
-    if (id === 's14') startTicker('tick1', TICK1);
+    if (id === 's15'){
+      startTicker('tickOwn', TICK_OWN);
+      startTicker('tickEnable', TICK_ENABLE);
+      startTicker('tickSteer', TICK_STEER);
+    }
   }
   function resetScene(i){
     stepsOf(i).forEach(function(e){ e.classList.remove('on'); });
@@ -1212,9 +1287,9 @@
     var tl = scenes[i].querySelector('.timeline'); if (tl) tl.classList.remove('live');
     if (scenes[i].querySelector('.tree')){ clearTree(); treeLoopStarted = false; }
     scenes[i].querySelectorAll('.flowarrow.on').forEach(function(a){ a.classList.remove('on'); });
+    var st = scenes[i].querySelector('.stairs'); if (st) st.classList.remove('on1');
     var cb = scenes[i].querySelector('.contbar'); if (cb) cb.classList.remove('drawn');
     var ax = scenes[i].querySelector('.oceanaxis'); if (ax) ax.classList.remove('drawn');
-    var qr = scenes[i].querySelector('.qr'); if (qr) qr.classList.remove('built');
     var el = scenes[i].querySelector('.elapsed'); if (el){ el.classList.remove('on', 'done'); el.textContent = '0:00'; }
     var tg = scenes[i].querySelector('#tagline'); if (tg) tg.classList.remove('glow');
     var rh = scenes[i].querySelector('#revealH'); if (rh) rh.classList.remove('play');
@@ -1238,7 +1313,6 @@
     if (sid === 's4') profileEl.classList.add('heard');
     var cb = scenes[i].querySelector('.contbar'); if (cb) cb.classList.add('drawn');
     var ax = scenes[i].querySelector('.oceanaxis'); if (ax) ax.classList.add('drawn');
-    var qr = scenes[i].querySelector('.qr'); if (qr) qr.classList.add('built');
     if (sid === 's11'){
       document.getElementById('tl').classList.add('live');
       RIPPLE.forEach(function(_, k){
@@ -1246,13 +1320,15 @@
         document.getElementById('lab' + k).classList.add('lit');
       });
     }
-    if (sid === 's14') startTicker('tick2', TICK2);
+    if (sid === 's12'){ var st = document.getElementById('stairs'); if (st) st.classList.add('on1'); }
+    if (sid === 's14') chaosStart();
+    if (sid === 's15') onEnter('s15');
     if (sid === 's16'){
       document.getElementById('arrDown').classList.add('on');
       document.getElementById('arrUp').classList.add('on');
       treeLoop();
     }
-    if (sid === 's19') scenes[i].querySelectorAll('.acard li').forEach(function(l){ l.classList.add('on'); });
+    if (sid === 's20') scenes[i].querySelectorAll('.acard li').forEach(function(l){ l.classList.add('on'); });
     if (sid === 's21'){
       scenes[i].querySelectorAll('.schip').forEach(function(c){ c.classList.remove('dim'); });
       var el = document.getElementById('elapsed'); el.classList.add('on', 'done'); el.textContent = '4:12';
@@ -1279,6 +1355,7 @@
     clearTimers();
     if (elapsedIv){ clearInterval(elapsedIv); elapsedIv = null; }
     treeLoopStarted = false;
+    chaosStop();
     document.querySelectorAll('video,audio').forEach(function(v){ try{ v.pause(); }catch(e){} });
     scenes[cur].classList.remove('active');
     cur = i;
