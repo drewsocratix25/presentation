@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leading an Agentic World · Socratix AI</title>
+<style>
+  :root{
+    --bg:#0B1220; --card:#16213A; --card2:#111A2E; --ink:#F5F1E8;
+    --muted:#8C96A8; --faint:#5A6478; --amber:#E8A33D; --amber-dim:#9A6F2B;
+    --blue:#4E88B5; --blue-lt:#6BA6C9; --red:#C0604F; --red-lt:#C97B6B;
+    --line:#273252;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden;background:var(--bg)}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;cursor:default}
+  #embers{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+  #stagewrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:1}
+  #stage{position:relative;width:1600px;height:900px;flex:0 0 auto}
+
+  .scene{position:absolute;inset:0;padding:70px 90px;opacity:0;visibility:hidden;transform:translateY(14px) scale(.995);transition:opacity .55s ease,transform .55s ease,visibility 0s linear .55s}
+  .scene.active{opacity:1;visibility:visible;transform:none;transition:opacity .55s ease,transform .55s ease}
+  .scene.slow{transition-duration:1.5s}
+
+  [data-step]{opacity:0;transform:translateY(26px);transition:opacity .65s cubic-bezier(.16,1,.3,1),transform .65s cubic-bezier(.16,1,.3,1)}
+  [data-step].on{opacity:1;transform:none}
+  [data-anim="left"]{transform:translateX(-46px)}
+  [data-anim="right"]{transform:translateX(46px)}
+  [data-anim="down"]{transform:translateY(-46px)}
+  [data-anim="pop"]{transform:scale(.82)}
+  [data-anim="stamp"]{transform:scale(1.18)}
+  [data-anim="none"]{transform:none}
+  [data-step].on[data-anim]{transform:none}
+
+  .kicker{font-size:21px;font-weight:700;letter-spacing:.42em;color:var(--amber);text-transform:uppercase}
+  .display{font-size:56px;font-weight:800;line-height:1.16;letter-spacing:-.01em}
+  .display .amber{color:var(--amber)}
+  .sub{font-size:26px;color:var(--muted)}
+  .foot{position:absolute;left:90px;right:90px;bottom:64px;font-size:24px;font-style:italic;color:var(--muted)}
+  .foot.strong{font-style:normal;font-weight:700;color:var(--ink)}
+
+  .card{background:var(--card2);border:1px solid var(--line);border-radius:16px}
+  .card.hi{background:var(--card);border-color:var(--amber-dim)}
+  .card.shadow{background:var(--card);border:none;box-shadow:0 14px 34px rgba(0,0,0,.38)}
+
+  #hud{position:fixed;inset:0;z-index:3;pointer-events:none}
+  #bar{position:absolute;left:0;bottom:0;height:3px;background:var(--amber);width:0;transition:width .45s ease;opacity:.85}
+  #secdots{position:absolute;left:34px;bottom:24px;display:flex;gap:12px}
+  #secdots i{width:11px;height:11px;border-radius:50%;border:1.4px solid #3A4356;transition:all .4s}
+  #secdots i.lit{background:var(--amber);border-color:var(--amber)}
+  #counter{position:absolute;right:34px;bottom:18px;font-size:15px;color:var(--faint);letter-spacing:.14em;font-variant-numeric:tabular-nums}
+  #hint{position:absolute;bottom:70px;width:100%;text-align:center;font-size:16px;color:var(--faint);letter-spacing:.06em;transition:opacity 1.2s;opacity:1}
+  #hint.gone{opacity:0}
+
+  /* S1 cover */
+  .cover{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+  .spark{width:34px;height:34px;border-radius:50%;background:var(--amber);box-shadow:0 0 34px 7px rgba(232,163,61,.45);animation:breathe 3.2s ease-in-out infinite}
+  @keyframes breathe{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.16);opacity:.82}}
+  .cover .kicker{margin:44px 0 20px}
+  .cover h1{font-size:96px;font-weight:800;letter-spacing:-.015em;line-height:1.05}
+  .cover .tag{margin-top:26px;font-size:30px;color:var(--muted)}
+  .cover .meta{position:absolute;bottom:64px;font-size:20px;color:var(--faint)}
+  .cover h1 .w{display:inline-block;opacity:0;transform:translateY(30px);animation:wordup .8s cubic-bezier(.16,1,.3,1) forwards}
+  @keyframes wordup{to{opacity:1;transform:none}}
+
+  /* S2 quotes */
+  .quotes{display:flex;gap:34px;margin-top:60px}
+  .qcard{flex:1;min-height:390px;padding:40px 36px;position:relative}
+  .qcard .qt{font-size:34px;font-style:italic;line-height:1.38;font-weight:600;min-height:240px}
+  .qcard .qt .caret{display:inline-block;width:3px;height:1.05em;background:var(--amber);vertical-align:-2px;margin-left:3px;animation:blink .8s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .qcard .att{position:absolute;left:36px;bottom:32px;font-size:19px;color:var(--muted);opacity:0;transition:opacity .6s}
+  .qcard .att.on{opacity:1}
+  .source{margin-top:40px;font-size:18px;font-style:italic;color:var(--faint)}
+
+  /* S3 reveal */
+  .center{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+  .reveal-h{font-size:62px;font-weight:800}
+  .reveal-h .w{display:inline-block;opacity:0;filter:blur(6px);transform:translateY(14px)}
+  .reveal-h.play .w{animation:wordin .7s cubic-bezier(.16,1,.3,1) forwards}
+  @keyframes wordin{to{opacity:1;filter:blur(0);transform:none}}
+  .videoframe{margin-top:40px;width:620px;height:330px;border-radius:18px;background:var(--card2);border:1px solid var(--amber-dim);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .wave{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:7px;padding:0 60px}
+  .wave i{width:7px;border-radius:4px;background:var(--amber);opacity:.32;height:12%;animation:wv 1.5s ease-in-out infinite}
+  @keyframes wv{0%,100%{height:10%}50%{height:var(--h)}}
+  .playbtn{position:relative;width:104px;height:104px;border-radius:50%;background:rgba(22,33,58,.9);border:2px solid var(--amber);display:flex;align-items:center;justify-content:center;z-index:1}
+  .playbtn::after{content:"";display:block;margin-left:8px;border-style:solid;border-width:19px 0 19px 31px;border-color:transparent transparent transparent var(--amber)}
+  .vlabel{margin-top:16px;font-size:19px;font-style:italic;color:var(--muted)}
+
+  /* S4 stats */
+  .stats{display:flex;margin-top:60px}
+  .stat{flex:1;text-align:center}
+  .stat .n{font-size:196px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  .stat .d{margin-top:16px;font-size:27px;color:var(--muted)}
+  .stat .src{margin-top:10px;font-size:18px;color:var(--faint)}
+
+  /* S5 promise */
+  .trio{display:flex;gap:34px;margin-top:56px}
+  .pcard{flex:1;padding:36px 34px;min-height:340px;position:relative}
+  .pcard .num{font-size:44px;font-weight:800;color:var(--amber)}
+  .pcard .q{margin-top:18px;font-size:28px;font-weight:700;line-height:1.3}
+  .pcard .lab{position:absolute;left:34px;bottom:28px;font-size:21px;font-weight:800;letter-spacing:.26em;color:var(--amber)}
+
+  /* sections */
+  .secnum{font-size:190px;font-weight:800;color:#232E48;line-height:1}
+  .sec .kicker{display:block;margin:6px 0 26px}
+  .sec .display{font-size:60px}
+  .sec .sub{margin-top:38px;font-size:26px;font-style:italic}
+
+  /* S7 continuum */
+  .contbar{position:relative;margin-top:0;height:64px;border-radius:14px;overflow:hidden;background:linear-gradient(90deg,var(--blue),var(--red))}
+  .contbar .mask{position:absolute;inset:0;background:var(--bg);transform-origin:right center;transition:transform 1.4s cubic-bezier(.6,.05,.2,1)}
+  .contbar.drawn .mask{transform:scaleX(0)}
+  .contbar .shine{position:absolute;top:0;bottom:0;width:130px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.16),transparent);animation:shine 5.5s ease-in-out infinite;animation-delay:2s}
+  @keyframes shine{0%{left:-140px}42%,100%{left:105%}}
+  .contlabels{display:flex;justify-content:space-between;margin-top:54px;margin-bottom:14px}
+  .contlabels b{font-size:20px;letter-spacing:.3em}
+  .contcopy{display:flex;justify-content:space-between;gap:70px;margin-top:48px}
+  .contcopy .blk{width:620px}
+  .contcopy .blk b{display:block;font-size:21px;letter-spacing:.24em;margin-bottom:16px}
+  .contcopy .blk p{font-size:24px;line-height:1.45}
+  .contcopy .right{text-align:right}
+
+  /* S8 ripple + capture strip */
+  .timeline{position:relative;margin-top:84px;height:212px}
+  .tl-line{position:absolute;left:40px;right:60px;top:104px;height:3px;background:#3A4356}
+  .tl-line::after{content:"";position:absolute;right:-14px;top:-7px;border-style:solid;border-width:8.5px 0 8.5px 15px;border-color:transparent transparent transparent #3A4356}
+  .tl-tag{position:absolute;top:122px;font-size:16px;font-weight:700;letter-spacing:.24em;color:var(--muted)}
+  .tl-dot{position:absolute;top:93px;width:25px;height:25px;border-radius:50%;background:var(--card);border:2px solid var(--amber);transition:background .45s,box-shadow .45s}
+  .tl-dot.lit{background:var(--amber);box-shadow:0 0 22px 4px rgba(232,163,61,.4)}
+  .tl-lab{position:absolute;width:220px;margin-left:-110px;text-align:center;font-size:20px;color:var(--muted);opacity:0;transform:translateY(8px);transition:all .5s}
+  .tl-lab.up{top:34px}.tl-lab.dn{top:144px}
+  .tl-lab.lit{opacity:1;transform:none;color:var(--ink)}
+  .ring{position:absolute;border-radius:50%;border:2px solid rgba(232,163,61,.55);pointer-events:none;animation:ringgo 2.6s cubic-bezier(.2,.6,.35,1) forwards}
+  @keyframes ringgo{from{opacity:.85}to{opacity:0;width:1250px;height:1250px;margin-left:-625px;margin-top:-625px}}
+  .capture{margin-top:26px}
+  .captrack{position:relative;height:14px;border-radius:8px;background:linear-gradient(90deg,rgba(232,163,61,.75),rgba(232,163,61,.28) 45%,rgba(58,67,86,.9));margin:14px 40px 10px 40px}
+  .capmark{position:absolute;top:-13px;left:0;display:flex;align-items:center;gap:10px;transform:translateX(0);transition:transform 2.6s cubic-bezier(.3,.7,.3,1) .7s}
+  [data-step].on .capmark{transform:translateX(880px)}
+  .capmark .tri{width:0;height:0;border-style:solid;border-width:20px 0 20px 30px;border-color:transparent transparent transparent var(--amber);filter:drop-shadow(0 0 10px rgba(232,163,61,.5))}
+  .capmark span{font-size:17px;font-weight:700;color:var(--amber);letter-spacing:.06em;white-space:nowrap}
+  .caplabels{display:flex;justify-content:space-between;margin:0 40px;font-size:16px;font-weight:700;letter-spacing:.14em}
+  .caplines{margin:20px 40px 0 40px;font-size:22px;line-height:1.5;color:var(--ink)}
+  .caplines .dim{color:var(--muted)}
+
+  /* discuss */
+  .badge{display:inline-block;padding:12px 26px;border-radius:100px;border:1.5px solid var(--amber);color:var(--amber);font-weight:800;font-size:19px;letter-spacing:.3em}
+  .discuss .q{margin-top:52px;font-size:54px;font-weight:800;line-height:1.28;max-width:1360px}
+  .discuss .supp{margin-top:26px;font-size:27px;color:var(--muted)}
+  .discuss .todo{margin-top:56px;font-size:26px;font-weight:700;color:var(--ink)}
+  .discuss .todo em{color:var(--amber);font-style:normal}
+  .minibar{position:relative;height:26px;border-radius:8px;background:linear-gradient(90deg,var(--blue),var(--red));margin-top:60px}
+  .minilabels{display:flex;justify-content:space-between;margin-top:14px;font-size:19px;font-weight:700}
+  .minilabels i{font-style:normal;color:var(--muted);font-weight:600}
+
+  /* S11 demo */
+  .demopill{display:inline-flex;align-items:center;gap:12px;padding:10px 24px;border-radius:100px;border:2px solid var(--amber);color:var(--amber);font-weight:700;font-size:20px;letter-spacing:.2em}
+  .demopill i{width:13px;height:13px;border-radius:50%;background:var(--amber);animation:blink 1.15s steps(1) infinite}
+  .clock{margin-top:44px;font-size:130px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .clock small{font-size:58px;font-weight:700;color:var(--muted);margin-left:14px}
+  .s11grid{display:flex;gap:60px;align-items:flex-start}
+  .s11left{width:560px;flex:0 0 auto}
+  .s11left .sub{margin-top:26px;font-size:27px;line-height:1.45}
+  .vwrap{flex:1;margin-top:8px}
+  .vshell{position:relative;width:100%;height:430px;border-radius:18px;overflow:hidden;background:var(--card2);border:1px solid var(--amber-dim)}
+  .vshell video{width:100%;height:100%;object-fit:cover;display:block;background:#000}
+  .vfb{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:30px}
+  .vfb .playbtn{transform:scale(.9)}
+  .vfb p{font-size:19px;color:var(--muted);font-style:italic}
+
+  /* S12 who owns */
+  .ownrow{margin-top:26px}
+  .ownrow .qq{font-size:46px;font-weight:800}
+  .ownrow .qq .m{color:var(--muted)}
+  .tickwrap{display:block;margin-top:6px;height:64px;overflow:hidden}
+  .tick{display:inline-block;font-size:46px;font-weight:800;color:var(--amber);transition:opacity .24s ease,transform .24s ease}
+  .tick.swap{opacity:0;transform:translateY(-16px)}
+  .bodyline{margin-top:38px;font-size:27px;line-height:1.5;max-width:1320px}
+
+  /* S13 org tree */
+  .s13grid{display:flex;gap:40px;margin-top:36px;align-items:center}
+  .s13col{width:390px;flex:0 0 auto}
+  .s13col b{font-size:27px;letter-spacing:.2em;color:var(--amber)}
+  .s13col .s{display:block;margin-top:6px;font-size:19px;color:var(--muted)}
+  .s13col ul{list-style:none;margin-top:20px}
+  .s13col li{font-size:23px;padding:8px 0}
+  .s13col.right{text-align:right}
+  .treewrap{flex:1;display:flex;flex-direction:column;align-items:center}
+  .tree{width:560px;height:320px}
+  .tree circle{fill:var(--card);stroke:var(--line);stroke-width:2;transition:fill .4s,stroke .4s,filter .4s}
+  .tree line{stroke:var(--line);stroke-width:2;transition:stroke .4s}
+  .tree circle.lit{fill:var(--amber);stroke:var(--amber);filter:drop-shadow(0 0 8px rgba(232,163,61,.55))}
+  .tree line.lit{stroke:var(--amber-dim)}
+  .tree.glow{filter:drop-shadow(0 0 22px rgba(232,163,61,.28))}
+  .flowarrow{font-size:44px;font-weight:800;color:var(--amber);opacity:0;transition:opacity .4s}
+  .flowarrow.on{opacity:1}
+  .flowarrow.down{animation:nudgeD 1.4s ease-in-out infinite}
+  .flowarrow.up{animation:nudgeU 1.4s ease-in-out infinite}
+  @keyframes nudgeD{0%,100%{transform:translateY(-6px)}50%{transform:translateY(8px)}}
+  @keyframes nudgeU{0%,100%{transform:translateY(8px)}50%{transform:translateY(-6px)}}
+
+  /* S16 asking vs delegating */
+  .avd{display:flex;gap:44px;margin-top:44px}
+  .acard{flex:1;padding:34px 40px}
+  .acard b{font-size:31px;letter-spacing:.22em}
+  .acard .s{display:block;margin-top:10px;font-size:18px;font-weight:800;letter-spacing:.08em;color:var(--ink)}
+  .acard .s.hi{color:var(--amber)}
+  .acard ul{list-style:none;margin-top:18px}
+  .acard li{font-size:23px;padding:7px 0;opacity:0;transform:translateX(-14px);transition:all .5s}
+  .acard li.on{opacity:1;transform:none}
+  .acard .arrow{color:var(--amber);margin-right:12px}
+  .sim{position:relative;height:108px;margin-top:18px;border-radius:12px;background:rgba(11,18,32,.55);border:1px solid var(--line)}
+  .snode{position:absolute;top:34px;width:86px;text-align:center;font-size:15px;font-weight:800;letter-spacing:.1em;color:var(--muted);border:1.5px solid var(--line);border-radius:10px;padding:9px 0;background:var(--card2)}
+  .snode.you{left:22px}
+  .snode.aiL{left:210px}
+  .snode.agent{left:210px;border-color:var(--amber-dim);color:var(--amber)}
+  .sdot{position:absolute;top:48px;width:13px;height:13px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px rgba(232,163,61,.6)}
+  .askdot{animation:askping 3.6s ease-in-out infinite}
+  @keyframes askping{0%{left:104px;opacity:1}30%{left:204px;opacity:1}38%{left:204px}64%{left:104px;opacity:1}72%,100%{left:104px;opacity:0}}
+  .asktask{position:absolute;left:330px;top:30px;width:150px;padding:8px 0;border-radius:9px;border:1.5px dashed var(--muted);color:var(--muted);font-size:14px;font-weight:700;text-align:center;animation:taskblink 3.6s ease-in-out infinite}
+  @keyframes taskblink{0%,68%{opacity:.35;border-color:var(--muted);color:var(--muted)}78%,92%{opacity:1;border-color:var(--red-lt);color:var(--red-lt)}100%{opacity:.35}}
+  .asknote{position:absolute;right:22px;top:76px;font-size:13px;color:var(--faint);font-style:italic}
+  .deldot{animation:delgo 4.5s ease-in-out infinite}
+  @keyframes delgo{0%{left:104px;opacity:1}16%{left:204px;opacity:1}22%,100%{left:204px;opacity:0}}
+  .ring2{position:absolute;left:236px;top:26px;width:34px;height:34px;border-radius:50%;border:2.5px solid rgba(232,163,61,.25);border-top-color:var(--amber);animation:spin 1.3s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .delword{position:absolute;left:186px;top:80px;width:134px;text-align:center;font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--amber)}
+  .delword i{position:absolute;left:0;right:0;font-style:normal;opacity:0;animation:wflash 4.5s linear infinite}
+  .delword i:nth-child(2){animation-delay:1.5s}
+  .delword i:nth-child(3){animation-delay:3s}
+  @keyframes wflash{0%,8%{opacity:0}12%,30%{opacity:1}36%,100%{opacity:0}}
+  .delout{position:absolute;left:360px;top:24px;display:flex;gap:9px}
+  .dtile{width:44px;height:58px;border-radius:7px;background:var(--card);border:1.5px solid var(--amber-dim);display:flex;align-items:center;justify-content:center;color:var(--amber);font-size:19px;font-weight:800;opacity:0;animation:tilepop 4.5s ease-in-out infinite}
+  .dtile:nth-child(2){animation-delay:.55s}
+  .dtile:nth-child(3){animation-delay:1.1s}
+  @keyframes tilepop{0%,28%{opacity:0;transform:scale(.6)}36%,88%{opacity:1;transform:scale(1)}96%,100%{opacity:0}}
+  .delnote{position:absolute;right:22px;top:88px;font-size:13px;color:var(--faint);font-style:italic}
+
+  /* S17 stack */
+  .stackaxis{display:flex;align-items:center;gap:26px;margin-top:44px}
+  .stackaxis b{font-size:19px;letter-spacing:.3em}
+  .axisline{flex:1;height:3px;background:#3A4356;position:relative;transform-origin:left center;transform:scaleX(0);transition:transform 1s cubic-bezier(.6,.05,.2,1)}
+  .axisline.drawn{transform:scaleX(1)}
+  .axisline::after{content:"";position:absolute;right:-13px;top:-6.5px;border-style:solid;border-width:8px 0 8px 14px;border-color:transparent transparent transparent #3A4356;opacity:0;transition:opacity .3s .8s}
+  .axisline.drawn::after{opacity:1}
+  .lanes{display:flex;gap:34px;margin-top:36px}
+  .lane{flex:1;padding:34px 32px;min-height:290px}
+  .lane b{font-size:24px;letter-spacing:.06em}
+  .lane .s{display:block;margin-top:10px;font-size:20px;font-style:italic;color:var(--muted)}
+  .lane p{margin-top:20px;font-size:22px;line-height:1.4}
+  .stackfoot{margin-top:38px;font-size:22px;font-style:italic;color:var(--muted)}
+  .stackfoot2{margin-top:14px;font-size:25px;font-weight:700}
+
+  /* S18 agent */
+  .steps3{display:flex;gap:34px;margin-top:56px}
+  .schip{flex:1;padding:32px;min-height:190px;transition:opacity .5s}
+  .schip b{font-size:24px;letter-spacing:.24em;color:var(--amber)}
+  .schip p{margin-top:14px;font-size:24px}
+  .schip.dim{opacity:.34}
+  .schip .think{display:none;margin-top:10px}
+  .schip.thinking .think{display:inline-block}
+  .think i{display:inline-block;width:9px;height:9px;margin-right:7px;border-radius:50%;background:var(--amber);animation:tb 1.1s ease-in-out infinite}
+  .think i:nth-child(2){animation-delay:.18s}.think i:nth-child(3){animation-delay:.36s}
+  @keyframes tb{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-5px)}}
+  .elapsed{position:absolute;right:90px;top:74px;font-size:36px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums;opacity:0;transition:opacity .5s}
+  .elapsed.on{opacity:1}
+  .elapsed.done{color:var(--amber)}
+
+  /* S20 fails */
+  .fails{display:flex;gap:34px;margin-top:48px}
+  .fcard{flex:1;padding:30px 32px;min-height:360px}
+  .fcard b{font-size:32px;letter-spacing:.12em;color:var(--amber)}
+  .fcard .s{display:block;margin-top:10px;font-size:19px;color:var(--muted)}
+  .fcard p{margin-top:12px;font-size:24px}
+  .fanim{position:relative;height:118px;margin-top:20px;border-radius:12px;background:rgba(11,18,32,.55);border:1px solid var(--line);overflow:hidden}
+  /* shelfware: tiles land on a shelf and go dark */
+  .shelfline{position:absolute;left:24px;right:24px;bottom:26px;height:3px;background:#3A4356;border-radius:2px}
+  .shelftile{position:absolute;bottom:29px;width:52px;height:52px;border-radius:9px;background:var(--card);border:1.5px solid var(--amber-dim);animation:shelffade 5.2s ease-in-out infinite}
+  .shelftile::after{content:"";position:absolute;left:9px;top:9px;right:9px;height:7px;border-radius:3px;background:var(--amber);opacity:.75}
+  .shelftile:nth-child(2){left:52px}
+  .shelftile:nth-child(3){left:126px;animation-delay:.8s}
+  .shelftile:nth-child(4){left:200px;animation-delay:1.6s}
+  @keyframes shelffade{0%{opacity:0;transform:translateY(-46px)}10%{opacity:1;transform:none}55%,88%{opacity:.22;transform:none}100%{opacity:0}}
+  /* drift: dot wanders a dashed path going nowhere */
+  .driftsvg{position:absolute;inset:0}
+  /* theater: a demo progress bar that never finishes */
+  .stagebar{position:absolute;left:26px;right:26px;top:46px;height:15px;border-radius:8px;background:#1B2740;overflow:hidden}
+  .stagefill{position:absolute;left:0;top:0;bottom:0;border-radius:8px;background:linear-gradient(90deg,var(--amber-dim),var(--amber));animation:neverships 3.8s ease-in-out infinite}
+  @keyframes neverships{0%{width:0}62%{width:86%}74%{width:86%}78%,100%{width:0}}
+  .stagelabel{position:absolute;left:26px;top:72px;font-size:14px;font-weight:700;letter-spacing:.1em;color:var(--faint)}
+  .stagelabel em{font-style:normal;color:var(--red-lt);animation:shipflash 3.8s ease-in-out infinite}
+  @keyframes shipflash{0%,60%{opacity:0}66%,74%{opacity:1}80%,100%{opacity:0}}
+  .spot{position:absolute;right:34px;top:18px;width:0;height:0;border-style:solid;border-width:0 26px 76px 26px;border-color:transparent transparent rgba(232,163,61,.14) transparent;transform-origin:top center;animation:sweep 4.6s ease-in-out infinite}
+  @keyframes sweep{0%,100%{transform:rotate(-16deg)}50%{transform:rotate(16deg)}}
+
+  /* S21 monday */
+  .monrows{margin-top:52px}
+  .mrow{display:flex;align-items:center;gap:30px;padding:20px 0}
+  .mrow .n{width:74px;height:74px;border-radius:50%;background:var(--card);border:2px solid var(--amber);display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;color:var(--amber);flex:0 0 auto}
+  .mrow p{font-size:36px;font-weight:700}
+
+  .omt{font-size:88px;font-weight:800}
+
+  /* S23 app */
+  .qr{margin-top:42px;width:230px;height:230px;border-radius:16px;background:var(--ink);padding:18px;display:grid;grid-template-columns:repeat(11,1fr);grid-template-rows:repeat(11,1fr);gap:3px}
+  .qr i{background:var(--bg);border-radius:2px;opacity:0;transform:scale(.3);transition:all .4s cubic-bezier(.16,1,.3,1)}
+  .qr i.off{background:transparent}
+  .qr.built i{opacity:1;transform:none}
+
+  /* S24 close */
+  .leaves{display:flex;gap:34px;margin-top:52px}
+  .lcard{flex:1;padding:34px 32px;min-height:250px}
+  .lcard b{font-size:22px;letter-spacing:.1em;color:var(--amber)}
+  .lcard p{margin-top:16px;font-size:23px;line-height:1.4}
+  .tagline{position:absolute;left:90px;bottom:64px;font-size:26px;font-weight:700;font-style:italic;color:var(--amber)}
+  .glow{text-shadow:0 0 26px rgba(232,163,61,.45)}
+</style>
+</head>
+<body>
+<canvas id="embers"></canvas>
+<div id="stagewrap"><div id="stage">
+
+  <!-- S1 COVER -->
+  <section class="scene cover" id="s1">
+    <div class="spark"></div>
+    <div class="kicker">Socratix AI</div>
+    <h1 id="coverTitle">Leading an Agentic World</h1>
+    <div class="tag">Three questions. Three decisions. One hour.</div>
+    <div class="meta">Vistage CEO Group &nbsp;·&nbsp; July 21, 2026</div>
+  </section>
+
+  <!-- S2 QUOTES -->
+  <section class="scene" id="s2">
+    <div class="kicker">Leaders of companies like yours</div>
+    <div class="display" style="margin-top:20px">We keep hearing the same three things.</div>
+    <div class="quotes">
+      <div class="qcard card shadow" data-step data-anim="pop">
+        <div class="qt" data-text="“We bought the tools. I couldn’t tell you what changed.”"></div>
+        <div class="att">an owner · manufacturing</div>
+      </div>
+      <div class="qcard card shadow" data-step data-anim="pop">
+        <div class="qt" data-text="“One of my guys built something clever. It broke when he left.”"></div>
+        <div class="att">a CEO · distribution</div>
+      </div>
+      <div class="qcard card shadow" data-step data-anim="pop">
+        <div class="qt" data-text="“I know it matters. I don’t know where it fits.”"></div>
+        <div class="att">a president · services</div>
+      </div>
+    </div>
+    <div class="source" data-step>Source: Socratix AI Mastermind survey data.</div>
+  </section>
+
+  <!-- S3 REVEAL -->
+  <section class="scene center" id="s3">
+    <div class="reveal-h" id="revealH" data-step data-anim="none">No human conducted those interviews.</div>
+    <div class="sub" style="margin-top:26px" data-step>A voice agent called, listened, asked follow-ups, and wrote the brief.</div>
+    <div data-step data-anim="pop">
+      <div class="videoframe">
+        <div class="wave" id="wave"></div>
+        <div class="playbtn"></div>
+      </div>
+      <div class="vlabel">20 seconds of the actual experience</div>
+    </div>
+    <div style="margin-top:36px;font-size:29px;font-weight:700;color:var(--amber)" data-step>Everything you see in the next hour is exactly that real.</div>
+  </section>
+
+  <!-- S4 PARADOX -->
+  <section class="scene" id="s4">
+    <div class="stats">
+      <div class="stat" data-step data-anim="none">
+        <div class="n" id="n88">0%</div>
+        <div class="d">of companies now use AI</div>
+        <div class="src">McKinsey · State of AI, 2025</div>
+      </div>
+      <div class="stat" data-step data-anim="none">
+        <div class="n" id="n95" style="color:var(--amber)">0%</div>
+        <div class="d">of AI pilots show no measurable P&amp;L impact</div>
+        <div class="src">MIT NANDA · The GenAI Divide, 2025</div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:84px;font-size:42px;font-weight:800" data-step data-anim="stamp">The gap isn’t the technology. It’s organizational.</div>
+  </section>
+
+  <!-- S5 PROMISE -->
+  <section class="scene" id="s5">
+    <div class="display">The winners get three things right.</div>
+    <div class="trio">
+      <div class="pcard card shadow" data-step data-anim="pop">
+        <div class="num">01</div>
+        <div class="q">What’s your AI bet: faster, beyond, or both?</div>
+        <div class="lab">STRATEGY</div>
+      </div>
+      <div class="pcard card shadow" data-step data-anim="pop">
+        <div class="num">02</div>
+        <div class="q">Who owns the transformation?</div>
+        <div class="lab">PEOPLE</div>
+      </div>
+      <div class="pcard card shadow" data-step data-anim="pop">
+        <div class="num">03</div>
+        <div class="q">What will you build, and who steers it?</div>
+        <div class="lab">TECHNOLOGY</div>
+      </div>
+    </div>
+    <div class="foot" data-step>Three decisions on your desk by Monday morning.</div>
+  </section>
+
+  <!-- S6 SECTION 1 -->
+  <section class="scene sec" id="s6">
+    <div class="secnum">01</div>
+    <span class="kicker">Business Strategy</span>
+    <div class="display">AI isn’t an IT project.<br><span class="amber">It’s a business transformation.</span></div>
+    <div class="sub">The question we hear most is “what model should we use?” The surprising answer: the business model.</div>
+  </section>
+
+  <!-- S7 CONTINUUM -->
+  <section class="scene" id="s7">
+    <div class="display">AI will create new markets in every industry.<br><span class="amber">It’s just a matter of time.</span></div>
+    <div data-step data-anim="none" id="contwrap">
+      <div class="contlabels">
+        <b style="color:var(--blue-lt)">BLUE OCEAN</b><b style="color:var(--red-lt)">RED OCEAN</b>
+      </div>
+      <div class="contbar" id="contbar"><div class="mask"></div><div class="shine"></div></div>
+    </div>
+    <div class="contcopy">
+      <div class="blk" data-step data-anim="left">
+        <b style="color:var(--blue-lt)">GO BEYOND</b>
+        <p>Which new markets open, and who captures them? Does your current market keep its relevance?</p>
+      </div>
+      <div class="blk right" data-step data-anim="right">
+        <b style="color:var(--red-lt)">GO FASTER</b>
+        <p>Everyone, including upstarts you haven’t met, is coming for cheaper, faster, more efficient. So can you: more profit from the model you already run.</p>
+      </div>
+    </div>
+    <div class="foot" data-step>Every AI bet lives somewhere on this line. The only mistake is not choosing.</div>
+  </section>
+
+  <!-- S8 RIPPLE -->
+  <section class="scene" id="s8">
+    <div class="display">The ripple reaches every industry.<br><span class="amber">The only variable is when.</span></div>
+    <div class="timeline" data-step data-anim="none" id="tl">
+      <div class="tl-line"></div>
+      <div class="tl-tag" style="left:40px">TODAY</div>
+      <div class="tl-tag" style="right:60px">TIME</div>
+    </div>
+    <div class="capture" data-step data-anim="none">
+      <div class="caplabels">
+        <span style="color:var(--amber)">REPEATABLE · WRITTEN DOWN</span>
+        <span style="color:var(--muted)">COMPLEX · JUDGMENT-HEAVY</span>
+      </div>
+      <div class="captrack">
+        <div class="capmark"><i class="tri"></i><span>reasoning improves</span></div>
+      </div>
+      <div class="caplines">
+        The more repeatable the work, and the better it’s written down, the easier it is to capture today.<br>
+        <span class="dim">As reasoning improves, agents take on more complex work. The line keeps moving right.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- S9 DISCUSS 1 -->
+  <section class="scene discuss" id="s9">
+    <span class="badge">DISCUSS &nbsp;·&nbsp; DECISION 1 OF 3</span>
+    <div class="q">Where are your AI bets today: faster, beyond, or both?</div>
+    <div class="todo">The decision to take home: <em>choose your mix on purpose.</em></div>
+    <div class="minibar"></div>
+    <div class="minilabels">
+      <span style="color:var(--blue-lt)">GO BEYOND &nbsp;<i>new markets, before someone else captures them</i></span>
+      <span style="color:var(--red-lt)"><i>more profit from the model you run today</i>&nbsp; GO FASTER</span>
+    </div>
+  </section>
+
+  <!-- S10 SECTION 2 -->
+  <section class="scene sec" id="s10">
+    <div class="secnum">02</div>
+    <span class="kicker">People &amp; Work</span>
+    <div class="display">AI isn’t just software.<br><span class="amber">It’s a shift in how work gets done.</span></div>
+    <div class="sub">One question: who owns the transformation?</div>
+  </section>
+
+  <!-- S11 DEMO 7:42 -->
+  <section class="scene" id="s11">
+    <span class="demopill"><i></i>DEMO</span>
+    <div class="s11grid">
+      <div class="s11left">
+        <div class="clock" data-step data-anim="none"><span id="clockNum">6:58</span><small>a.m.</small></div>
+        <div class="sub" data-step>Drew’s actual morning, run by voice, while the coffee brews.</div>
+      </div>
+      <div class="vwrap" data-step data-anim="pop">
+        <div class="vshell">
+          <video id="mv" controls preload="auto" playsinline>
+            <source src="morning_demo.mp4" type="video/mp4">
+          </video>
+          <div class="vfb" id="vfb">
+            <div class="playbtn"></div>
+            <p>Drop <b>morning_demo.mp4</b> next to this file<br>and the demo plays right here.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="foot" data-step>Real inbox. Real calendar. Real connections. Nothing staged.</div>
+  </section>
+
+  <!-- S12 WHO OWNS -->
+  <section class="scene" id="s12">
+    <div class="ownrow">
+      <div class="qq"><span class="m">Who owns AI?</span></div>
+      <span class="tickwrap"><span class="tick" id="tick1">the Head of IT</span></span>
+    </div>
+    <div class="ownrow" data-step data-anim="none">
+      <div class="qq"><span class="m">Who owns the transformation?</span></div>
+      <span class="tickwrap"><span class="tick" id="tick2">top-down: the CEO</span></span>
+    </div>
+    <div class="bodyline" data-step>Tools follow whoever picked them up. When that person leaves, the tools leave too. Transformation stays only when someone senior owns it.</div>
+    <div class="foot strong" data-step>There’s no single right answer. But “undefined” is the wrong one.</div>
+  </section>
+
+  <!-- S13 BOTH DIRECTIONS -->
+  <section class="scene" id="s13">
+    <div class="display">Transformation runs in both directions.</div>
+    <div class="s13grid">
+      <div class="s13col" data-step data-anim="left" id="tdcol">
+        <b>TOP DOWN</b><span class="s">leadership-led</span>
+        <ul><li>Reimagine core processes</li><li>Prioritize the use cases</li><li>Build, learn, deploy</li></ul>
+      </div>
+      <div class="treewrap">
+        <div style="display:flex;align-items:center;gap:26px">
+          <div class="flowarrow down" id="arrDown">↓</div>
+          <svg class="tree" id="tree" viewBox="0 0 560 320">
+            <line x1="280" y1="46" x2="140" y2="150"/><line x1="280" y1="46" x2="280" y2="150"/><line x1="280" y1="46" x2="420" y2="150"/>
+            <line x1="140" y1="150" x2="70" y2="262"/><line x1="140" y1="150" x2="154" y2="262"/>
+            <line x1="280" y1="150" x2="238" y2="262"/><line x1="280" y1="150" x2="322" y2="262"/>
+            <line x1="420" y1="150" x2="406" y2="262"/><line x1="420" y1="150" x2="490" y2="262"/>
+            <circle class="r0" cx="280" cy="40" r="22"/>
+            <circle class="r1" cx="140" cy="150" r="17"/><circle class="r1" cx="280" cy="150" r="17"/><circle class="r1" cx="420" cy="150" r="17"/>
+            <circle class="r2" cx="70" cy="268" r="13"/><circle class="r2" cx="154" cy="268" r="13"/><circle class="r2" cx="238" cy="268" r="13"/>
+            <circle class="r2" cx="322" cy="268" r="13"/><circle class="r2" cx="406" cy="268" r="13"/><circle class="r2" cx="490" cy="268" r="13"/>
+          </svg>
+          <div class="flowarrow up" id="arrUp">↑</div>
+        </div>
+      </div>
+      <div class="s13col right" data-step data-anim="right" id="bucol">
+        <b>BOTTOM UP</b><span class="s">people-led</span>
+        <ul><li>AI proficiency for everyone</li><li>Name your champions</li><li>Train citizen developers</li></ul>
+      </div>
+    </div>
+    <div class="foot strong" data-step style="color:var(--amber)">The winners run both at once.</div>
+  </section>
+
+  <!-- S14 DISCUSS 2 -->
+  <section class="scene discuss" id="s14">
+    <span class="badge">DISCUSS &nbsp;·&nbsp; DECISION 2 OF 3</span>
+    <div class="q">Who owns your transformation?</div>
+    <div class="supp">If it belongs to everyone, it belongs to no one.</div>
+    <div class="todo">The decision to take home: <em>put a name next to it.</em></div>
+  </section>
+
+  <!-- S15 SECTION 3 -->
+  <section class="scene sec" id="s15">
+    <div class="secnum">03</div>
+    <span class="kicker">Technology</span>
+    <div class="display">AI isn’t just an app you use.<br><span class="amber">It’s a capability you design,<br>steer, and monitor.</span></div>
+    <div class="sub">Like a new hire: you direct the work, and you check the work.</div>
+  </section>
+
+  <!-- S16 ASKING VS DELEGATING -->
+  <section class="scene" id="s16">
+    <div class="display">Asking vs. delegating</div>
+    <div class="avd">
+      <div class="acard card" data-step id="askCard">
+        <b>ASKING</b>
+        <span class="s">GENAI · 2023–2024</span>
+        <div class="sim">
+          <span class="snode you">YOU</span>
+          <i class="sdot askdot"></i>
+          <span class="snode aiL">AI</span>
+          <div class="asktask">your next step</div>
+          <div class="asknote">every answer comes back to your desk</div>
+        </div>
+        <ul>
+          <li><span class="arrow">→</span>You write a prompt</li>
+          <li><span class="arrow">→</span>It gives you an answer</li>
+          <li><span class="arrow">→</span>You do the next step</li>
+        </ul>
+      </div>
+      <div class="acard card hi" data-step id="delCard">
+        <b style="color:var(--amber)">DELEGATING</b>
+        <span class="s hi">AGENTIC, TOWARD MORE GENERAL INTELLIGENCE · 2025 AND BEYOND</span>
+        <div class="sim">
+          <span class="snode you">YOU</span>
+          <i class="sdot deldot"></i>
+          <span class="snode agent">AGENT</span>
+          <div class="ring2"></div>
+          <div class="delword"><i>REASONS</i><i>ACTS</i><i>VERIFIES</i></div>
+          <div class="delout"><div class="dtile">✓</div><div class="dtile">✓</div><div class="dtile">✓</div></div>
+          <div class="delnote">finished work stacks up</div>
+        </div>
+        <ul>
+          <li><span class="arrow">→</span>You hand off a goal</li>
+          <li><span class="arrow">→</span>It reasons, acts, verifies</li>
+          <li><span class="arrow">→</span>It delivers finished work</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot strong" data-step style="color:var(--amber)">The shift of 2026 isn’t smarter answers. It’s finished work.</div>
+  </section>
+
+  <!-- S17 STACK -->
+  <section class="scene" id="s17">
+    <div class="display">Designing your AI stack</div>
+    <div class="stackaxis" data-step data-anim="none" id="axiswrap">
+      <b style="color:var(--muted)">USING</b>
+      <div class="axisline" id="axisline"></div>
+      <b style="color:var(--amber)">BUILDING</b>
+    </div>
+    <div class="lanes">
+      <div class="lane card" data-step data-anim="pop">
+        <b>OUT-OF-THE-BOX</b><span class="s">copilots &amp; chat tools</span>
+        <p>Everyone will have these. Table stakes, not an edge.</p>
+      </div>
+      <div class="lane card" data-step data-anim="pop">
+        <b>WORKFLOW PLATFORMS</b><span class="s">your people automate processes</span>
+        <p>Agentic workflows at citizen-developer level.</p>
+      </div>
+      <div class="lane card hi" data-step data-anim="pop">
+        <b style="color:var(--amber)">DEVELOPMENT PLATFORM</b><span class="s">custom, on your data</span>
+        <p>Your use cases, your edge. Where advantage lives.</p>
+      </div>
+    </div>
+    <div class="stackfoot" data-step>Run by a vendor you trust, or owned outright when the data is too critical. Both are valid. Drifting into one isn’t.</div>
+    <div class="stackfoot2" data-step>You steer it. You check its work. You watch its quality, like any new hire.</div>
+  </section>
+
+  <!-- S18 LIVE AGENT -->
+  <section class="scene" id="s18">
+    <span class="demopill"><i></i>LIVE</span>
+    <div class="elapsed" id="elapsed">0:00</div>
+    <div class="display" style="margin-top:40px" data-step data-anim="none">An agent, doing real work.</div>
+    <div class="steps3">
+      <div class="schip card dim" data-step data-anim="none" id="chipGoal">
+        <b>GOAL</b><p>a task a person ran by hand</p>
+      </div>
+      <div class="schip card dim" data-step data-anim="none" id="chipAgent">
+        <b>AGENT</b><p>reasons → acts → verifies</p>
+        <span class="think"><i></i><i></i><i></i></span>
+      </div>
+      <div class="schip card dim" data-step data-anim="none" id="chipResult">
+        <b>RESULT</b><p>minutes, not an afternoon</p>
+      </div>
+    </div>
+    <div class="foot" data-step>Running in a real manufacturing environment, today.</div>
+  </section>
+
+  <!-- S19 DISCUSS 3 -->
+  <section class="scene discuss" id="s19">
+    <span class="badge">DISCUSS &nbsp;·&nbsp; DECISION 3 OF 3</span>
+    <div class="q">What’s the first thing you’d hand to an agent, the moment you trusted it?</div>
+    <div class="todo">The decision to take home: <em>pick your lane. Use, orchestrate, or build.</em></div>
+  </section>
+
+  <!-- S20 BOTTOM LINE -->
+  <section class="scene" id="s20">
+    <div class="display">Miss one foundation, and AI fails. Predictably.</div>
+    <div class="fails">
+      <div class="fcard card shadow" data-step data-anim="stamp">
+        <b>SHELFWARE</b><span class="s">skip people &amp; work</span>
+        <div class="fanim">
+          <div class="shelfline"></div>
+          <div class="shelftile"></div><div class="shelftile"></div><div class="shelftile"></div>
+        </div>
+        <p>tools no one adopts</p>
+      </div>
+      <div class="fcard card shadow" data-step data-anim="stamp">
+        <b>DRIFT</b><span class="s">skip business strategy</span>
+        <div class="fanim">
+          <svg class="driftsvg" viewBox="0 0 380 118">
+            <path id="driftpath" d="M 30 80 C 90 20, 140 110, 200 55 S 300 95, 350 40" fill="none" stroke="#3A4356" stroke-width="2.5" stroke-dasharray="7 8"/>
+            <circle r="8" fill="#E8A33D">
+              <animateMotion dur="5.2s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;0.5;1" calcMode="linear">
+                <mpath href="#driftpath"/>
+              </animateMotion>
+            </circle>
+          </svg>
+        </div>
+        <p>motion without direction</p>
+      </div>
+      <div class="fcard card shadow" data-step data-anim="stamp">
+        <b>THEATER</b><span class="s">skip the technology</span>
+        <div class="fanim">
+          <div class="spot"></div>
+          <div class="stagebar"><div class="stagefill"></div></div>
+          <div class="stagelabel">DEMO&nbsp;&nbsp;→&nbsp;&nbsp;SHIP&nbsp;&nbsp;<em>never quite ships</em></div>
+        </div>
+        <p>demos that never ship</p>
+      </div>
+    </div>
+    <div class="foot strong" data-step>All three, compounding. That’s where the value shows up.</div>
+  </section>
+
+  <!-- S21 MONDAY -->
+  <section class="scene" id="s21">
+    <div class="display">Begin Monday morning.</div>
+    <div class="sub" style="margin-top:18px">Ask your senior leadership team the same three questions:</div>
+    <div class="monrows">
+      <div class="mrow" data-step data-anim="left"><div class="n">1</div><p>What’s our AI bet: faster, beyond, or both?</p></div>
+      <div class="mrow" data-step data-anim="left"><div class="n">2</div><p>Who owns our transformation?</p></div>
+      <div class="mrow" data-step data-anim="left"><div class="n">3</div><p>What will we build first, and who steers it?</p></div>
+    </div>
+    <div class="foot" data-step>The sheet in front of you. Write your first answers now.</div>
+  </section>
+
+  <!-- S22 ONE MORE THING -->
+  <section class="scene slow center" id="s22">
+    <div class="omt">One more thing.</div>
+  </section>
+
+  <!-- S23 APP -->
+  <section class="scene center" id="s23">
+    <div class="kicker">The Leader’s Journey</div>
+    <div class="display" style="margin-top:24px" data-step data-anim="none">Everything you decided, yours to keep.</div>
+    <div class="sub" style="margin-top:24px;max-width:1150px" data-step>An interactive experience of the leader’s journey through AI transformation: the three questions, the decisions, and what comes after.</div>
+    <div class="qr" id="qr" data-step data-anim="pop"></div>
+    <div style="margin-top:28px;font-size:23px;font-style:italic;color:var(--muted)" data-step>On your phone tonight, and on the sheet in front of you.</div>
+  </section>
+
+  <!-- S24 CLOSE -->
+  <section class="scene" id="s24">
+    <div class="display">The depth lives on the table.</div>
+    <div class="leaves">
+      <div class="lcard card" data-step data-anim="pop"><b>THE WHITE PAPER</b><p>the full thinking behind the three foundations</p></div>
+      <div class="lcard card" data-step data-anim="pop"><b>THE DESK REFERENCE</b><p>critical questions, plus AI basics at your desk</p></div>
+      <div class="lcard card" data-step data-anim="pop"><b>THE FIVE QUESTIONS</b><p>for your leadership team</p></div>
+    </div>
+    <div style="margin-top:56px;font-size:28px;color:var(--muted)" data-step>What we didn’t cover: security, privacy, policy, cost. Find us at lunch.</div>
+    <div class="tagline" data-step data-anim="none" id="tagline">Human Wisdom. AI Illumination.</div>
+  </section>
+
+</div></div>
+
+<div id="hud">
+  <div id="secdots"><i></i><i></i><i></i></div>
+  <div id="bar"></div>
+  <div id="counter">01 / 24</div>
+  <div id="hint">→ &nbsp;advance beats &nbsp;·&nbsp; ← &nbsp;back &nbsp;·&nbsp; F &nbsp;fullscreen</div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var scenes = Array.prototype.slice.call(document.querySelectorAll('.scene'));
+  var cur = 0, step = 0, timers = [];
+
+  function later(fn, ms){ timers.push(setTimeout(fn, ms)); }
+  function every(fn, ms){ var t = setInterval(fn, ms); timers.push(t); return t; }
+  function clearTimers(){ timers.forEach(function(t){ clearTimeout(t); clearInterval(t); }); timers = []; }
+  function stepsOf(i){ return scenes[i].querySelectorAll('[data-step]'); }
+
+  /* ambient embers */
+  var cv = document.getElementById('embers'), cx = cv.getContext('2d'), P = [];
+  function sizeCanvas(){ cv.width = innerWidth; cv.height = innerHeight; }
+  sizeCanvas();
+  for (var i = 0; i < 26; i++) P.push({
+    x: Math.random(), y: Math.random(), r: 1 + Math.random() * 2.2,
+    vy: .00022 + Math.random() * .00042, vx: (Math.random() - .5) * .00016,
+    a: .06 + Math.random() * .16, ph: Math.random() * 6.28
+  });
+  (function tick(t){
+    cx.clearRect(0, 0, cv.width, cv.height);
+    for (var i = 0; i < P.length; i++){
+      var p = P[i];
+      p.y -= p.vy; p.x += p.vx + Math.sin(t / 2600 + p.ph) * .00006;
+      if (p.y < -.02){ p.y = 1.02; p.x = Math.random(); }
+      if (p.x < -.02) p.x = 1.02; if (p.x > 1.02) p.x = -.02;
+      var tw = .55 + .45 * Math.sin(t / 900 + p.ph);
+      cx.beginPath();
+      cx.arc(p.x * cv.width, p.y * cv.height, p.r, 0, 6.28);
+      cx.fillStyle = 'rgba(232,163,61,' + (p.a * tw).toFixed(3) + ')';
+      cx.fill();
+    }
+    requestAnimationFrame(tick);
+  })(0);
+
+  /* stage scaling */
+  var stage = document.getElementById('stage');
+  function fit(){
+    var s = Math.min(innerWidth / 1600, innerHeight / 900);
+    stage.style.transform = 'scale(' + s + ')';
+    sizeCanvas();
+  }
+  addEventListener('resize', fit); fit();
+
+  /* cover + reveal word effects */
+  (function(){
+    var el = document.getElementById('coverTitle');
+    el.innerHTML = el.textContent.split(' ').map(function(w, i){
+      return '<span class="w" style="animation-delay:' + (0.25 + i * 0.14) + 's">' + w + '</span>';
+    }).join(' ');
+    var rh = document.getElementById('revealH');
+    rh.innerHTML = rh.textContent.split(' ').map(function(w, i){
+      return '<span class="w" style="animation-delay:' + (i * 0.28) + 's">' + w + '</span>';
+    }).join(' ');
+  })();
+
+  /* waveform */
+  (function(){
+    var wave = document.getElementById('wave');
+    for (var i = 0; i < 26; i++){
+      var b = document.createElement('i');
+      b.style.setProperty('--h', (18 + Math.round(Math.abs(Math.sin(i * .7)) * 58)) + '%');
+      b.style.animationDelay = (i * .085) + 's';
+      wave.appendChild(b);
+    }
+  })();
+
+  /* ripple timeline */
+  var RIPPLE = [
+    ['Software & code', 6, true],
+    ['Content & marketing', 23, false],
+    ['Customer operations', 40, true],
+    ['Finance & back office', 57, false],
+    ['Manufacturing & logistics', 74, true],
+    ['Human development', 93, false]
+  ];
+  (function(){
+    var tl = document.getElementById('tl');
+    RIPPLE.forEach(function(r, i){
+      var d = document.createElement('div');
+      d.className = 'tl-dot'; d.id = 'dot' + i;
+      d.style.left = 'calc(' + r[1] + '% - 12px)';
+      tl.appendChild(d);
+      var l = document.createElement('div');
+      l.className = 'tl-lab ' + (r[2] ? 'up' : 'dn'); l.id = 'lab' + i;
+      l.style.left = r[1] + '%';
+      l.textContent = r[0];
+      tl.appendChild(l);
+    });
+  })();
+  function playRipple(){
+    var tl = document.getElementById('tl');
+    document.getElementById('dot0').classList.add('lit');
+    document.getElementById('lab0').classList.add('lit');
+    var ring = document.createElement('div');
+    ring.className = 'ring';
+    ring.style.left = 'calc(' + RIPPLE[0][1] + '% + 0px)';
+    ring.style.top = '105px'; ring.style.width = '0'; ring.style.height = '0';
+    tl.appendChild(ring);
+    later(function(){ ring.remove(); }, 2700);
+    for (var i = 1; i < RIPPLE.length; i++)(function(i){
+      later(function(){
+        document.getElementById('dot' + i).classList.add('lit');
+        document.getElementById('lab' + i).classList.add('lit');
+      }, 300 + i * 340);
+    })(i);
+  }
+
+  /* count up */
+  function countUp(el, target, ms){
+    var t0 = null;
+    function frame(t){
+      if (!t0) t0 = t;
+      var k = Math.min(1, (t - t0) / ms);
+      k = 1 - Math.pow(1 - k, 3);
+      el.textContent = Math.round(target * k) + '%';
+      if (k < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  /* clock spin */
+  function playClock(){
+    var el = document.getElementById('clockNum');
+    var mins = 6 * 60 + 58, target = 7 * 60 + 42;
+    var iv = every(function(){
+      var left = target - mins;
+      mins += left > 22 ? 3 : (left > 8 ? 2 : 1);
+      if (mins >= target){ mins = target; clearInterval(iv); }
+      el.textContent = Math.floor(mins / 60) + ':' + ('0' + (mins % 60)).slice(-2);
+    }, 46);
+  }
+
+  /* quote typewriter */
+  function typeQuote(card){
+    var qt = card.querySelector('.qt'), att = card.querySelector('.att');
+    if (!qt || qt.dataset.done){ if (att) att.classList.add('on'); return; }
+    qt.dataset.done = '1';
+    var text = qt.dataset.text, i = 0;
+    qt.innerHTML = '<span class="caret"></span>';
+    var iv = every(function(){
+      i++;
+      qt.innerHTML = text.slice(0, i) + '<span class="caret"></span>';
+      if (i >= text.length){
+        clearInterval(iv);
+        later(function(){ var c = qt.querySelector('.caret'); if (c) c.remove(); att.classList.add('on'); }, 350);
+      }
+    }, 26);
+  }
+
+  /* tickers (s12) */
+  var TICK1 = ['the Head of IT', 'the Head of HR', 'the CEO', 'an SVP', 'a smart whiz kid', 'nobody, officially'];
+  var TICK2 = ['top-down: the CEO', 'bottom-up: your managers', 'a cross-functional committee', 'right now: no one'];
+  function startTicker(id, items){
+    var el = document.getElementById(id), i = 0;
+    el.textContent = items[0];
+    return every(function(){
+      el.classList.add('swap');
+      later(function(){
+        i = (i + 1) % items.length;
+        el.textContent = items[i];
+        el.classList.remove('swap');
+      }, 240);
+    }, 1750);
+  }
+
+  /* s13 org tree flows */
+  function rows(){
+    var t = document.getElementById('tree');
+    return [t.querySelectorAll('.r0'), t.querySelectorAll('.r1'), t.querySelectorAll('.r2'), t.querySelectorAll('line')];
+  }
+  function lightRow(list){ list.forEach(function(n){ n.classList.add('lit'); }); }
+  function flowDown(){
+    var r = rows();
+    document.getElementById('arrDown').classList.add('on');
+    lightRow(r[0]);
+    later(function(){ lightRow(r[3]); }, 200);
+    later(function(){ lightRow(r[1]); }, 350);
+    later(function(){ lightRow(r[2]); }, 700);
+  }
+  function flowUp(){
+    document.getElementById('arrUp').classList.add('on');
+    var t = document.getElementById('tree');
+    [t.querySelectorAll('.r2'), t.querySelectorAll('.r1'), t.querySelectorAll('.r0')].forEach(function(list, k){
+      later(function(){
+        list.forEach(function(n){
+          n.classList.remove('lit');
+          void n.getBoundingClientRect();
+          n.classList.add('lit');
+        });
+      }, k * 320);
+    });
+  }
+  function treeGlow(){ document.getElementById('tree').classList.add('glow'); }
+
+  /* agent chips */
+  var elapsedIv = null;
+  function agentChip(el){
+    el.classList.remove('dim');
+    var elapsed = document.getElementById('elapsed');
+    if (el.id === 'chipAgent'){
+      el.classList.add('thinking');
+      elapsed.classList.add('on'); elapsed.classList.remove('done');
+      var s = 0; elapsed.textContent = '0:00';
+      elapsedIv = every(function(){
+        s += 7;
+        elapsed.textContent = Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2);
+      }, 90);
+    }
+    if (el.id === 'chipResult'){
+      document.getElementById('chipAgent').classList.remove('thinking');
+      if (elapsedIv) clearInterval(elapsedIv);
+      elapsed.classList.add('done');
+    }
+  }
+
+  /* QR assembly */
+  (function(){
+    var qr = document.getElementById('qr');
+    function finder(r, c){ return (r < 3 && c < 3) || (r < 3 && c > 7) || (r > 7 && c < 3); }
+    var seed = 7;
+    function rnd(){ seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+    for (var r = 0; r < 11; r++) for (var c = 0; c < 11; c++){
+      var i = document.createElement('i');
+      var on;
+      if (finder(r, c)){
+        var rr = r % 8, cc = c > 7 ? c - 8 : c;
+        on = !(rr === 1 && cc === 1);
+      } else on = rnd() > .5;
+      if (!on) i.className = 'off';
+      i.style.transitionDelay = (rnd() * .8).toFixed(2) + 's';
+      qr.appendChild(i);
+    }
+  })();
+
+  /* embedded video (s11) */
+  var vid = document.getElementById('mv');
+  function videoFallback(){
+    document.getElementById('vfb').style.display = 'flex';
+    if (vid) vid.style.display = 'none';
+  }
+  if (vid){
+    vid.addEventListener('error', videoFallback, true);
+    setTimeout(function(){
+      if (!vid.videoWidth && (vid.networkState === 3 || vid.readyState === 0)) videoFallback();
+    }, 1600);
+  }
+
+  /* per-step effects */
+  function onReveal(el, sceneId){
+    if (sceneId === 's2' && el.classList.contains('qcard')) later(function(){ typeQuote(el); }, 250);
+    if (el.id === 'contwrap') later(function(){ document.getElementById('contbar').classList.add('drawn'); }, 120);
+    if (el.id === 'tl') later(playRipple, 400);
+    if (el.querySelector && el.querySelector('#n88')) later(function(){ countUp(document.getElementById('n88'), 88, 1300); }, 200);
+    if (el.querySelector && el.querySelector('#n95')) later(function(){ countUp(document.getElementById('n95'), 95, 1300); }, 200);
+    if (el.classList.contains('clock')) later(playClock, 300);
+    if (el.classList.contains('vwrap') && vid){
+      try{ var pp = vid.play(); if (pp && pp.catch) pp.catch(function(){}); }catch(e){}
+    }
+    if (el.querySelector && el.querySelector('#tick2')) startTicker('tick2', TICK2);
+    if (el.id === 'tdcol') flowDown();
+    if (el.id === 'bucol') flowUp();
+    if (sceneId === 's13' && el.classList.contains('foot')) treeGlow();
+    if (el.id === 'axiswrap') later(function(){ document.getElementById('axisline').classList.add('drawn'); }, 120);
+    if (el.classList.contains('schip')) agentChip(el);
+    if (el.id === 'askCard' || el.id === 'delCard'){
+      el.querySelectorAll('li').forEach(function(li, i){ later(function(){ li.classList.add('on'); }, 350 + i * 300); });
+    }
+    if (el.id === 'qr') later(function(){ el.classList.add('built'); }, 150);
+    if (el.id === 'tagline') later(function(){ el.classList.add('glow'); }, 500);
+  }
+
+  /* scene lifecycle */
+  function onEnter(id){
+    if (id === 's12') startTicker('tick1', TICK1);
+  }
+  function resetScene(i){
+    stepsOf(i).forEach(function(e){ e.classList.remove('on'); });
+    scenes[i].querySelectorAll('.qt').forEach(function(q){ q.dataset.done = ''; q.innerHTML = ''; });
+    scenes[i].querySelectorAll('.att.on').forEach(function(a){ a.classList.remove('on'); });
+    scenes[i].querySelectorAll('.acard li.on').forEach(function(l){ l.classList.remove('on'); });
+    scenes[i].querySelectorAll('.schip').forEach(function(c){ c.classList.add('dim'); c.classList.remove('thinking'); });
+    scenes[i].querySelectorAll('.tl-dot.lit,.tl-lab.lit').forEach(function(d){ d.classList.remove('lit'); });
+    scenes[i].querySelectorAll('.tree circle.lit,.tree line.lit').forEach(function(n){ n.classList.remove('lit'); });
+    scenes[i].querySelectorAll('.flowarrow.on').forEach(function(a){ a.classList.remove('on'); });
+    var tr = scenes[i].querySelector('.tree'); if (tr) tr.classList.remove('glow');
+    var cb = scenes[i].querySelector('.contbar'); if (cb) cb.classList.remove('drawn');
+    var ax = scenes[i].querySelector('.axisline'); if (ax) ax.classList.remove('drawn');
+    var qr = scenes[i].querySelector('.qr'); if (qr) qr.classList.remove('built');
+    var el = scenes[i].querySelector('.elapsed'); if (el){ el.classList.remove('on', 'done'); el.textContent = '0:00'; }
+    var tg = scenes[i].querySelector('#tagline'); if (tg) tg.classList.remove('glow');
+    var rh = scenes[i].querySelector('#revealH'); if (rh) rh.classList.remove('play');
+  }
+  function revealAll(i){
+    var sid = scenes[i].id;
+    stepsOf(i).forEach(function(e){
+      e.classList.add('on');
+      if (sid === 's2' && e.classList.contains('qcard')){
+        var qt = e.querySelector('.qt');
+        qt.dataset.done = '1'; qt.textContent = qt.dataset.text;
+        e.querySelector('.att').classList.add('on');
+      }
+    });
+    var rh = scenes[i].querySelector('#revealH'); if (rh) rh.classList.add('play');
+    var cb = scenes[i].querySelector('.contbar'); if (cb) cb.classList.add('drawn');
+    var ax = scenes[i].querySelector('.axisline'); if (ax) ax.classList.add('drawn');
+    var qr = scenes[i].querySelector('.qr'); if (qr) qr.classList.add('built');
+    if (sid === 's8'){
+      RIPPLE.forEach(function(_, k){
+        document.getElementById('dot' + k).classList.add('lit');
+        document.getElementById('lab' + k).classList.add('lit');
+      });
+    }
+    if (sid === 's12') startTicker('tick2', TICK2);
+    if (sid === 's13'){
+      document.getElementById('arrDown').classList.add('on');
+      document.getElementById('arrUp').classList.add('on');
+      document.querySelectorAll('.tree circle,.tree line').forEach(function(n){ n.classList.add('lit'); });
+      treeGlow();
+    }
+    if (sid === 's16') scenes[i].querySelectorAll('.acard li').forEach(function(l){ l.classList.add('on'); });
+    if (sid === 's18'){
+      scenes[i].querySelectorAll('.schip').forEach(function(c){ c.classList.remove('dim'); });
+      var el = document.getElementById('elapsed'); el.classList.add('on', 'done'); el.textContent = '4:12';
+    }
+    var tg = scenes[i].querySelector('#tagline'); if (tg) tg.classList.add('glow');
+  }
+
+  var SECTION = function(i){
+    if (i >= 14) return 3;
+    if (i >= 9) return 2;
+    if (i >= 5) return 1;
+    return 0;
+  };
+  function hud(){
+    document.getElementById('bar').style.width = (cur / (scenes.length - 1) * 100) + '%';
+    document.getElementById('counter').textContent = ('0' + (cur + 1)).slice(-2) + ' / ' + scenes.length;
+    var lit = SECTION(cur);
+    document.querySelectorAll('#secdots i').forEach(function(d, k){ d.classList.toggle('lit', k < lit); });
+    if (cur > 0) document.getElementById('hint').classList.add('gone');
+  }
+
+  function go(i, fromBack){
+    if (i < 0 || i >= scenes.length) return;
+    clearTimers();
+    if (elapsedIv){ clearInterval(elapsedIv); elapsedIv = null; }
+    document.querySelectorAll('video').forEach(function(v){ try{ v.pause(); }catch(e){} });
+    scenes[cur].classList.remove('active');
+    cur = i;
+    resetScene(cur);
+    if (fromBack){ step = stepsOf(cur).length; revealAll(cur); }
+    else step = 0;
+    scenes[cur].classList.add('active');
+    onEnter(scenes[cur].id);
+    hud();
+  }
+  function next(){
+    var els = stepsOf(cur);
+    if (step < els.length){
+      var el = els[step];
+      step++;
+      el.classList.add('on');
+      if (el.id === 'revealH') el.classList.add('play');
+      try{ onReveal(el, scenes[cur].id); }catch(e){}
+    } else go(cur + 1, false);
+  }
+  function prev(){ if (cur > 0) go(cur - 1, true); }
+
+  addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown' || e.key === 'Enter'){ e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp'){ e.preventDefault(); prev(); }
+    else if (e.key === 'Home'){ go(0, false); }
+    else if (e.key === 'End'){ go(scenes.length - 1, true); }
+    else if (e.key === 'f' || e.key === 'F'){
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen();
+    }
+  });
+  addEventListener('click', function(e){
+    var t = e.target;
+    while (t){
+      if (t.tagName === 'VIDEO') return;   /* let the player own its clicks */
+      t = t.parentElement;
+    }
+    if (e.clientX < innerWidth * .22) prev(); else next();
+  });
+
+  scenes[0].classList.add('active');
+  hud();
+  later(function(){ document.getElementById('hint').classList.add('gone'); }, 6000);
+})();
+</script>
+</body>
+</html>
