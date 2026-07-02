@@ -646,8 +646,18 @@
     <div class="foot" data-step>This is “just turn AI on for everyone”: every tool, every team, no deliberation. Cutting-edge, and unmanaged.</div>
   </section>
 
-  <!-- S15 MANAGING -->
+  <!-- S15b MANAGED TRANSFORMATION (contrast) -->
   <section class="scene" id="s15">
+    <div class="display">The same power, managed:<br><span class="amber">transformation, on purpose.</span></div>
+    <div class="chaoswrap noadvance" data-step data-anim="none" id="orderwrap">
+      <canvas id="order"></canvas>
+      <div class="chaostag" id="ordertag">THE SAME STABLE ORGANIZATION</div>
+    </div>
+    <div class="foot" data-step>Same organization. Same AI. Introduced deliberately: owned, enabled, steered.</div>
+  </section>
+
+  <!-- S15 MANAGING -->
+  <section class="scene" id="s16">
     <div class="display">Transformation is managed,<br><span class="amber">or it’s chaotic.</span></div>
     <div class="mgr">
       <div class="mcard card shadow" data-step data-anim="pop">
@@ -676,7 +686,7 @@
   </section>
 
   <!-- S16 BOTH DIRECTIONS -->
-  <section class="scene" id="s16">
+  <section class="scene" id="s17">
     <div class="display">Support the transformation in both directions.</div>
     <div class="s13grid">
       <div class="s13col" data-step data-anim="left" id="tdcol">
@@ -708,14 +718,14 @@
   </section>
 
   <!-- S17 DISCUSS 2 -->
-  <section class="scene discuss" id="s17">
+  <section class="scene discuss" id="s18">
     <span class="badge">DISCUSS &nbsp;·&nbsp; DECISION 2 OF 3</span>
     <div class="q">How are you managing AI transformation in your business today?</div>
     <div class="supp">Who owns it. How you enable it. How you steer it.</div>
   </section>
 
   <!-- S18 SECTION 3 -->
-  <section class="scene sec" id="s18">
+  <section class="scene sec" id="s19">
     <div class="secnum">03</div>
     <span class="kicker">Technology</span>
     <div class="display">AI isn’t a SaaS tool.<br><span class="amber">It’s a technological transformation.</span></div>
@@ -723,7 +733,7 @@
   </section>
 
   <!-- S19 STACK (moved before asking/delegating) -->
-  <section class="scene" id="s19">
+  <section class="scene" id="s20">
     <div class="display">Enabling your organization: <span class="amber">the AI stack.</span></div>
     <div class="oceanaxis" data-step data-anim="none" id="axiswrap">
       <b class="l">USING</b>
@@ -751,7 +761,7 @@
   </section>
 
   <!-- S20 ASKING VS DELEGATING -->
-  <section class="scene" id="s20">
+  <section class="scene" id="s21">
     <div class="display" style="font-size:48px">Asking vs. delegating</div>
     <div class="avd">
       <div class="acard card" data-step id="askCard">
@@ -796,7 +806,7 @@
   </section>
 
   <!-- S21 LIVE AGENT -->
-  <section class="scene" id="s21">
+  <section class="scene" id="s22">
     <span class="demopill"><i></i>LIVE</span>
     <div class="elapsed" id="elapsed">0:00</div>
     <div class="display" style="margin-top:40px" data-step data-anim="none">An agent, doing real work.</div>
@@ -816,14 +826,14 @@
   </section>
 
   <!-- S22 DISCUSS 3 -->
-  <section class="scene discuss" id="s22">
+  <section class="scene discuss" id="s23">
     <span class="badge">DISCUSS &nbsp;·&nbsp; DECISION 3 OF 3</span>
     <div class="q">What do you need to do to prepare your organization, technologically, for AI transformation?</div>
     <div class="supp">Context and data to ask. Tools and permissions to delegate.</div>
   </section>
 
   <!-- S23 BOTTOM LINE -->
-  <section class="scene" id="s23">
+  <section class="scene" id="s24">
     <div class="display">Miss one foundation: AI fails. Predictably.</div>
     <div class="fails">
       <div class="fcard card shadow" data-step data-anim="stamp">
@@ -866,7 +876,7 @@
   </section>
 
   <!-- S24 MONDAY -->
-  <section class="scene" id="s24">
+  <section class="scene" id="s25">
     <div class="display">Begin Monday morning.</div>
     <div class="sub" style="margin-top:18px">Ask your senior leadership team the same three questions:</div>
     <div class="monrows">
@@ -878,12 +888,12 @@
   </section>
 
   <!-- S25 ONE MORE THING -->
-  <section class="scene slow center" id="s25">
+  <section class="scene slow center" id="s26">
     <div class="omt">One more thing.</div>
   </section>
 
   <!-- S26 CLOSE -->
-  <section class="scene" id="s26">
+  <section class="scene" id="s27">
     <div class="display">The depth lives on the table.</div>
     <div class="leaves">
       <div class="lcard card" data-step data-anim="pop"><b>THE WHITE PAPER</b><p>the full thinking behind the three foundations</p></div>
@@ -905,7 +915,7 @@
 <div id="hud">
   <div id="secdots"><i></i><i></i><i></i></div>
   <div id="bar"></div>
-  <div id="counter">01 / 26</div>
+  <div id="counter">01 / 27</div>
   <div id="hint">→ &nbsp;advance beats &nbsp;·&nbsp; ← &nbsp;back &nbsp;·&nbsp; F &nbsp;fullscreen</div>
 </div>
 
@@ -1122,6 +1132,112 @@
     if (chaosRAF){ try{ cancelAnimationFrame(chaosRAF); }catch(e){} chaosRAF = null; }
   }
 
+  /* managed-transformation simulation (contrast to chaos) */
+  var orderRAF = null;
+  function orderStart(){
+    try{
+      var c = document.getElementById('order'); if (!c || orderRAF) return;
+      var dpr = window.devicePixelRatio || 1;
+      var W = c.clientWidth || 1418, H = c.clientHeight || 468;
+      c.width = W * dpr; c.height = H * dpr;
+      var g = c.getContext('2d'); if (!g) return;
+      if (g.setTransform) g.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var tag = document.getElementById('ordertag');
+      var cols = 17, rows = 7, mx = 80, my = 60;
+      var sx = (W - 2 * mx) / (cols - 1), sy = (H - 2 * my) / (rows - 1);
+      var cxp = W / 2, cyp = H / 2;
+      var dots = [];
+      for (var r = 0; r < rows; r++) for (var col = 0; col < cols; col++){
+        var hx = mx + col * sx, hy = my + r * sy;
+        dots.push({ hx: hx, hy: hy, x: hx, y: hy, ph: Math.random() * 6.28, state: 0, ang: 0, rad: 0, spd: 0 });
+      }
+      var grown = [], t0 = null, phase = 0, intr = null, waveT = null, holdAt = null, fade = 0;
+      function assign(d){
+        var dx = d.hx - cxp, dy = d.hy - cyp;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        var ring = Math.min(4, Math.floor(dist / 132));
+        d.rad = 48 + ring * 34;
+        d.ang = Math.atan2(dy, dx);
+        d.spd = (ring % 2 ? -1 : 1) * (0.013 - ring * 0.0016);
+      }
+      function reset(now){
+        dots.forEach(function(d){ d.x = d.hx; d.y = d.hy; d.state = 0; });
+        grown = []; t0 = now; phase = 0; intr = null; waveT = null; holdAt = null; fade = 0;
+        if (tag){ tag.textContent = 'THE SAME STABLE ORGANIZATION'; tag.style.color = ''; }
+      }
+      function frame(now){
+        if (t0 === null) t0 = now;
+        var t = (now - t0) / 1000;
+        g.clearRect(0, 0, W, H);
+        if (phase === 0 && t > 2.2){ phase = 1; intr = { x: -24, y: cyp };
+          if (tag){ tag.textContent = 'AI, INTRODUCED DELIBERATELY'; tag.style.color = '#E8A33D'; } }
+        if (phase === 1 && intr){
+          intr.x += (cxp - intr.x) * 0.045 + 1.2;
+          if (Math.abs(intr.x - cxp) < 14){ phase = 2; waveT = now; intr = null; }
+        }
+        if (phase === 2){
+          var waveR = (now - waveT) / 1000 * 260;
+          dots.forEach(function(d){
+            if (d.state === 0){
+              var dx = d.hx - cxp, dy = d.hy - cyp;
+              if (Math.sqrt(dx * dx + dy * dy) < waveR){ d.state = 1; assign(d); }
+            }
+            if (d.state === 1){
+              var tx = cxp + Math.cos(d.ang) * d.rad, ty = cyp + Math.sin(d.ang) * d.rad;
+              d.x += (tx - d.x) * 0.07; d.y += (ty - d.y) * 0.07;
+              if (Math.abs(d.x - tx) < 2.5 && Math.abs(d.y - ty) < 2.5) d.state = 2;
+            }
+            if (d.state === 2){ d.ang += d.spd; d.x = cxp + Math.cos(d.ang) * d.rad; d.y = cyp + Math.sin(d.ang) * d.rad; }
+          });
+          var allTouched = dots.every(function(d){ return d.state >= 1; });
+          if (allTouched){
+            if (grown.length < 34 && Math.random() < 0.5)
+              grown.push({ ang: Math.random() * 6.28, rad: 48 + 5 * 34, spd: 0.0055, alpha: 0 });
+            var allSet = dots.every(function(d){ return d.state === 2; });
+            if (allSet && grown.length >= 34 && !holdAt){
+              holdAt = now;
+              if (tag){ tag.textContent = 'MANAGED. TRANSFORMED. GREATER.'; tag.style.color = '#6BA6C9'; }
+            }
+          }
+          if (holdAt && now - holdAt > 4200) phase = 3;
+        }
+        if (phase === 3){ fade += 0.018; if (fade >= 1) reset(now); }
+        if (phase >= 2){
+          var pr = 13 + Math.sin(now / 420) * 3;
+          g.fillStyle = 'rgba(232,163,61,' + (0.9 * (1 - fade)).toFixed(3) + ')';
+          g.beginPath(); g.arc(cxp, cyp, pr, 0, 6.28); g.fill();
+          g.strokeStyle = 'rgba(232,163,61,' + (0.25 * (1 - fade)).toFixed(3) + ')';
+          g.beginPath(); g.arc(cxp, cyp, pr + 9 + Math.sin(now / 300) * 2, 0, 6.28); g.stroke();
+        }
+        dots.forEach(function(d){
+          if (d.state === 0){
+            d.x = d.hx + Math.sin(now / 1900 + d.ph) * 1.7;
+            d.y = d.hy + Math.cos(now / 2300 + d.ph) * 1.7;
+            g.fillStyle = 'rgba(124,138,166,' + (0.75 * (1 - fade)).toFixed(3) + ')';
+          } else {
+            g.fillStyle = 'rgba(232,163,61,' + (0.9 * (1 - fade)).toFixed(3) + ')';
+          }
+          g.beginPath(); g.arc(d.x, d.y, d.state ? 4.6 : 4, 0, 6.28); g.fill();
+        });
+        grown.forEach(function(d){
+          d.alpha = Math.min(1, d.alpha + 0.02); d.ang += d.spd;
+          var x = cxp + Math.cos(d.ang) * d.rad, y = cyp + Math.sin(d.ang) * d.rad;
+          g.fillStyle = 'rgba(107,166,201,' + (0.85 * d.alpha * (1 - fade)).toFixed(3) + ')';
+          g.beginPath(); g.arc(x, y, 4.2, 0, 6.28); g.fill();
+        });
+        if (phase === 1 && intr){
+          g.fillStyle = 'rgba(232,163,61,.95)';
+          g.beginPath(); g.arc(intr.x, intr.y, 7, 0, 6.28); g.fill();
+        }
+        orderRAF = requestAnimationFrame(frame);
+      }
+      orderRAF = requestAnimationFrame(frame);
+    }catch(e){}
+  }
+  function orderStop(){
+    if (orderRAF){ try{ cancelAnimationFrame(orderRAF); }catch(e){} orderRAF = null; }
+  }
+
   /* count up */
   function countUp(el, target, ms){
     var t0 = null;
@@ -1255,6 +1371,7 @@
       try{ var pp = vid.play(); if (pp && pp.catch) pp.catch(function(){}); }catch(e){}
     }
     if (el.id === 'chaoswrap') later(chaosStart, 300);
+    if (el.id === 'orderwrap') later(orderStart, 300);
     if (el.id === 'tdcol') cascade('down', 'litA');
     if (el.id === 'bucol'){ cascade('up', 'litB'); later(treeLoop, 1400); }
     if (el.id === 'axiswrap') later(function(){ document.getElementById('axiswrap').classList.add('drawn'); }, 120);
@@ -1271,7 +1388,7 @@
 
   /* lifecycle */
   function onEnter(id){
-    if (id === 's15'){
+    if (id === 's16'){
       startTicker('tickOwn', TICK_OWN);
       startTicker('tickEnable', TICK_ENABLE);
       startTicker('tickSteer', TICK_STEER);
@@ -1322,14 +1439,15 @@
     }
     if (sid === 's12'){ var st = document.getElementById('stairs'); if (st) st.classList.add('on1'); }
     if (sid === 's14') chaosStart();
-    if (sid === 's15') onEnter('s15');
-    if (sid === 's16'){
+    if (sid === 's15') orderStart();
+    if (sid === 's16') onEnter('s16');
+    if (sid === 's17'){
       document.getElementById('arrDown').classList.add('on');
       document.getElementById('arrUp').classList.add('on');
       treeLoop();
     }
-    if (sid === 's20') scenes[i].querySelectorAll('.acard li').forEach(function(l){ l.classList.add('on'); });
-    if (sid === 's21'){
+    if (sid === 's21') scenes[i].querySelectorAll('.acard li').forEach(function(l){ l.classList.add('on'); });
+    if (sid === 's22'){
       scenes[i].querySelectorAll('.schip').forEach(function(c){ c.classList.remove('dim'); });
       var el = document.getElementById('elapsed'); el.classList.add('on', 'done'); el.textContent = '4:12';
     }
@@ -1337,7 +1455,7 @@
   }
 
   var SECTION = function(i){
-    if (i >= 17) return 3;
+    if (i >= 18) return 3;
     if (i >= 9) return 2;
     if (i >= 5) return 1;
     return 0;
@@ -1356,6 +1474,7 @@
     if (elapsedIv){ clearInterval(elapsedIv); elapsedIv = null; }
     treeLoopStarted = false;
     chaosStop();
+    orderStop();
     document.querySelectorAll('video,audio').forEach(function(v){ try{ v.pause(); }catch(e){} });
     scenes[cur].classList.remove('active');
     cur = i;
