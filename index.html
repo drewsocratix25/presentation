@@ -215,7 +215,7 @@
 
   /* chaos */
   .chaoswrap{position:relative;margin-top:44px;height:470px;border-radius:18px;background:rgba(11,18,32,.6);border:1px solid var(--line);overflow:hidden}
-  #chaos{width:100%;height:100%;display:block}
+  #chaos,#order{width:100%;height:100%;display:block}
   .chaostag{position:absolute;left:26px;top:20px;font-size:15px;font-weight:800;letter-spacing:.24em;color:var(--faint);transition:color .6s}
 
   /* manage transformation */
@@ -1146,85 +1146,122 @@
       var cols = 17, rows = 7, mx = 80, my = 60;
       var sx = (W - 2 * mx) / (cols - 1), sy = (H - 2 * my) / (rows - 1);
       var cxp = W / 2, cyp = H / 2;
-      var dots = [];
+      var dots = [], N = cols * rows;
       for (var r = 0; r < rows; r++) for (var col = 0; col < cols; col++){
         var hx = mx + col * sx, hy = my + r * sy;
-        dots.push({ hx: hx, hy: hy, x: hx, y: hy, ph: Math.random() * 6.28, state: 0, ang: 0, rad: 0, spd: 0 });
+        dots.push({ hx: hx, hy: hy, x: hx, y: hy, ph: Math.random() * 6.28, on: false });
       }
-      var grown = [], t0 = null, phase = 0, intr = null, waveT = null, holdAt = null, fade = 0;
-      function assign(d){
+      /* precompute formation targets */
+      var byDist = dots.map(function(d, k){ 
         var dx = d.hx - cxp, dy = d.hy - cyp;
-        var dist = Math.sqrt(dx * dx + dy * dy);
-        var ring = Math.min(4, Math.floor(dist / 132));
-        d.rad = 48 + ring * 34;
-        d.ang = Math.atan2(dy, dx);
-        d.spd = (ring % 2 ? -1 : 1) * (0.013 - ring * 0.0016);
-      }
+        return { k: k, dist: Math.sqrt(dx * dx + dy * dy), ang: Math.atan2(dy, dx) };
+      }).sort(function(a, b){ return a.dist - b.dist; });
+      var ringDef = [[8, 40], [16, 76], [24, 112], [32, 148], [39, 184]];
+      var idx = 0;
+      ringDef.forEach(function(rd, ri){
+        for (var j = 0; j < rd[0] && idx < N; j++, idx++){
+          var d = dots[byDist[idx].k];
+          d.ring = ri; d.ringR = rd[1];
+          d.ringA = (j / rd[0]) * 6.283 + ri * 0.35;
+        }
+      });
+      byDist.forEach(function(b, k){
+        var d = dots[b.k];
+        d.spK = k;                       /* spiral order */
+        d.roseT = (k / N) * 6.283;       /* rosette param */
+      });
+      var t0 = null, phase = 0, intr = null, patT0 = null, fade = 0;
       function reset(now){
-        dots.forEach(function(d){ d.x = d.hx; d.y = d.hy; d.state = 0; });
-        grown = []; t0 = now; phase = 0; intr = null; waveT = null; holdAt = null; fade = 0;
+        dots.forEach(function(d){ d.x = d.hx; d.y = d.hy; d.on = false; });
+        t0 = now; phase = 0; intr = null; patT0 = null; fade = 0;
         if (tag){ tag.textContent = 'THE SAME STABLE ORGANIZATION'; tag.style.color = ''; }
       }
       function frame(now){
         if (t0 === null) t0 = now;
         var t = (now - t0) / 1000;
         g.clearRect(0, 0, W, H);
-        if (phase === 0 && t > 2.2){ phase = 1; intr = { x: -24, y: cyp };
-          if (tag){ tag.textContent = 'AI, INTRODUCED DELIBERATELY'; tag.style.color = '#E8A33D'; } }
+
+        if (phase === 0 && t > 2.2){
+          phase = 1; intr = { x: -24, y: my + 3 * sy };
+          if (tag){ tag.textContent = 'AI, INTRODUCED DELIBERATELY'; tag.style.color = '#E8A33D'; }
+        }
         if (phase === 1 && intr){
-          intr.x += (cxp - intr.x) * 0.045 + 1.2;
-          if (Math.abs(intr.x - cxp) < 14){ phase = 2; waveT = now; intr = null; }
+          intr.x += 4.4;
+          for (var i = 0; i < N; i++){
+            var d = dots[i];
+            if (!d.on && Math.abs(d.x - intr.x) < 15 && Math.abs(d.y - intr.y) < 15){
+              d.on = true; phase = 2; intr = null;
+              if (tag){ tag.textContent = 'A GUIDED CHAIN REACTION'; tag.style.color = '#E8A33D'; }
+              break;
+            }
+          }
+          if (intr && intr.x > W + 30){ dots[Math.floor(N / 2)].on = true; phase = 2; intr = null; }
         }
         if (phase === 2){
-          var waveR = (now - waveT) / 1000 * 260;
-          dots.forEach(function(d){
-            if (d.state === 0){
-              var dx = d.hx - cxp, dy = d.hy - cyp;
-              if (Math.sqrt(dx * dx + dy * dy) < waveR){ d.state = 1; assign(d); }
-            }
-            if (d.state === 1){
-              var tx = cxp + Math.cos(d.ang) * d.rad, ty = cyp + Math.sin(d.ang) * d.rad;
-              d.x += (tx - d.x) * 0.07; d.y += (ty - d.y) * 0.07;
-              if (Math.abs(d.x - tx) < 2.5 && Math.abs(d.y - ty) < 2.5) d.state = 2;
-            }
-            if (d.state === 2){ d.ang += d.spd; d.x = cxp + Math.cos(d.ang) * d.rad; d.y = cyp + Math.sin(d.ang) * d.rad; }
-          });
-          var allTouched = dots.every(function(d){ return d.state >= 1; });
-          if (allTouched){
-            if (grown.length < 34 && Math.random() < 0.5)
-              grown.push({ ang: Math.random() * 6.28, rad: 48 + 5 * 34, spd: 0.0055, alpha: 0 });
-            var allSet = dots.every(function(d){ return d.state === 2; });
-            if (allSet && grown.length >= 34 && !holdAt){
-              holdAt = now;
-              if (tag){ tag.textContent = 'MANAGED. TRANSFORMED. GREATER.'; tag.style.color = '#6BA6C9'; }
+          for (var i = 0; i < N; i++){
+            var d = dots[i]; if (!d.on) continue;
+            for (var j = 0; j < N; j++){
+              var o = dots[j]; if (o.on) continue;
+              var dx = o.hx - d.hx, dy = o.hy - d.hy;
+              if (dx * dx + dy * dy < 15000 && Math.random() < 0.06) o.on = true;
             }
           }
-          if (holdAt && now - holdAt > 4200) phase = 3;
+          if (dots.every(function(d){ return d.on; })){
+            phase = 3; patT0 = now;
+            if (tag){ tag.textContent = 'MANAGED. TRANSFORMED. GREATER.'; tag.style.color = '#6BA6C9'; }
+          }
         }
-        if (phase === 3){ fade += 0.018; if (fade >= 1) reset(now); }
-        if (phase >= 2){
-          var pr = 13 + Math.sin(now / 420) * 3;
-          g.fillStyle = 'rgba(232,163,61,' + (0.9 * (1 - fade)).toFixed(3) + ')';
-          g.beginPath(); g.arc(cxp, cyp, pr, 0, 6.28); g.fill();
-          g.strokeStyle = 'rgba(232,163,61,' + (0.25 * (1 - fade)).toFixed(3) + ')';
-          g.beginPath(); g.arc(cxp, cyp, pr + 9 + Math.sin(now / 300) * 2, 0, 6.28); g.stroke();
+        var pat = -1;
+        if (phase === 3){
+          var pt = (now - patT0) / 1000;
+          if (pt > 33.6){ phase = 4; }
+          pat = Math.floor(pt / 4.2) % 4;
         }
-        dots.forEach(function(d){
-          if (d.state === 0){
+        if (phase === 4){ fade += 0.016; if (fade >= 1) reset(now); }
+
+        for (var i = 0; i < N; i++){
+          var d = dots[i], tx = d.hx, ty = d.hy, ease = 0.09;
+          if (!d.on){
             d.x = d.hx + Math.sin(now / 1900 + d.ph) * 1.7;
             d.y = d.hy + Math.cos(now / 2300 + d.ph) * 1.7;
-            g.fillStyle = 'rgba(124,138,166,' + (0.75 * (1 - fade)).toFixed(3) + ')';
+          } else if (phase === 2 || pat === -1){
+            /* converted, pre-pattern: charged vibration in place */
+            d.x = d.hx + Math.sin(now / 130 + d.ph) * 3.2;
+            d.y = d.hy + Math.cos(now / 150 + d.ph) * 3.2;
           } else {
-            g.fillStyle = 'rgba(232,163,61,' + (0.9 * (1 - fade)).toFixed(3) + ')';
+            var ts = now / 1000;
+            if (pat === 0){
+              /* successive waves, left to right, growing amplitude */
+              var amp = 12 + (d.hx / W) * 46;
+              tx = d.hx;
+              ty = d.hy + Math.sin(ts * 2.6 - d.hx * 0.012) * amp;
+            } else if (pat === 1){
+              /* breathing concentric rings, pulses radiating outward */
+              var rr = d.ringR + Math.sin(ts * 2.2 - d.ring * 0.9) * 17;
+              tx = cxp + Math.cos(d.ringA + ts * 0.12 * (d.ring % 2 ? -1 : 1)) * rr;
+              ty = cyp + Math.sin(d.ringA + ts * 0.12 * (d.ring % 2 ? -1 : 1)) * rr;
+            } else if (pat === 2){
+              /* rotating spiral */
+              var sr = 12 + d.spK * 1.75;
+              var sa = d.spK * 2.39996 + ts * 0.4;
+              tx = cxp + Math.cos(sa) * sr * 1.35;
+              ty = cyp + Math.sin(sa) * sr * 0.72;
+            } else {
+              /* rotating five-petal rosette */
+              var th = d.roseT + ts * 0.28;
+              var pr = 118 + 72 * Math.cos(5 * (d.roseT + ts * 0.06));
+              tx = cxp + Math.cos(th) * pr * 1.15;
+              ty = cyp + Math.sin(th) * pr * 0.78;
+            }
+            d.x += (tx - d.x) * ease;
+            d.y += (ty - d.y) * ease;
           }
-          g.beginPath(); g.arc(d.x, d.y, d.state ? 4.6 : 4, 0, 6.28); g.fill();
-        });
-        grown.forEach(function(d){
-          d.alpha = Math.min(1, d.alpha + 0.02); d.ang += d.spd;
-          var x = cxp + Math.cos(d.ang) * d.rad, y = cyp + Math.sin(d.ang) * d.rad;
-          g.fillStyle = 'rgba(107,166,201,' + (0.85 * d.alpha * (1 - fade)).toFixed(3) + ')';
-          g.beginPath(); g.arc(x, y, 4.2, 0, 6.28); g.fill();
-        });
+          var rad = d.on ? (4.6 + (pat >= 0 ? Math.sin(now / 320 + i * 0.22) * 1.1 : 0)) : 4;
+          g.fillStyle = d.on
+            ? 'rgba(232,163,61,' + (0.9 * (1 - fade)).toFixed(3) + ')'
+            : 'rgba(124,138,166,' + (0.75 * (1 - fade)).toFixed(3) + ')';
+          g.beginPath(); g.arc(d.x, d.y, rad, 0, 6.28); g.fill();
+        }
         if (phase === 1 && intr){
           g.fillStyle = 'rgba(232,163,61,.95)';
           g.beginPath(); g.arc(intr.x, intr.y, 7, 0, 6.28); g.fill();
